@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Chispa Gamer 1.8 · El nuevo punto gamer de Berazategui</title>
+<meta name="description" content="PS5, realidad virtual, baile y la única mesa de PoolFútbol oficial del país. Reservá por hora o festejá tu cumpleaños en Berazategui Centro.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0E0F14">
+</head>
+<body>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:#0E0F14;}
+@keyframes lcgFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes lcgFloat2{0%,100%{transform:translateY(0)}50%{transform:translateY(13px)}}
+@keyframes lcgPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.5),0 16px 38px rgba(0,0,0,.5)}50%{box-shadow:0 0 0 18px rgba(37,211,102,0),0 16px 38px rgba(0,0,0,.5)}}
+@keyframes lcgSpin{to{transform:rotate(360deg)}}
+[data-reveal]{opacity:0;transform:translateY(34px);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .85s cubic-bezier(.2,.7,.2,1);}
+[data-reveal].in{opacity:1;transform:none;}
+::placeholder{color:#6c7280;opacity:1;}
+select option{background:#14151c;color:#F6F7FB;}
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{transition:none !important;}
+}
+input:focus,select:focus{outline:none;border-color:#19D3FF !important;box-shadow:0 0 0 3px rgba(25,211,255,.18);}
+/* Galería: imágenes con zoom suave al pasar el mouse */
+.gal-item{position:relative;border-radius:22px;overflow:hidden;cursor:pointer;box-shadow:0 18px 40px rgba(0,0,0,.35);}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s cubic-bezier(.2,.7,.2,1);}
+.gal-item:hover img{transform:scale(1.09);}
+/* Experiencias: personaje de fondo con zoom fluido al pasar el mouse */
+article:has(> .exp-bg){overflow:hidden;}
+.exp-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0;opacity:.42;transition:transform .6s cubic-bezier(.2,.7,.2,1),opacity .45s;}
+.exp-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(14,15,20,.30),rgba(14,15,20,.86));pointer-events:none;}
+article:has(> .exp-bg):hover .exp-bg{transform:scale(1.13);opacity:.72;}
+article:has(> .exp-bg) > *:not(.exp-bg):not(.exp-ov){position:relative;z-index:2;}
+/* Realidad Virtual (destacado): mismo zoom fluido, imagen a full */
+.exp-rv{transition:transform .6s cubic-bezier(.2,.7,.2,1);}
+article:has(> .exp-rv):hover > .exp-rv{transform:scale(1.09);}
+
+/* ================================================================
+   MOBILE PREMIUM (320–768px) — solo media queries, desktop intacto
+   ================================================================ */
+.lcg-burger{display:none;}
+.lcg-mobilemenu{display:none;}
+@keyframes lcgMenuIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+
+@media (max-width:768px){
+  html,body{overflow-x:hidden;}
+  img,video,iframe{max-width:100%;}
+
+  /* ---------- NAVBAR ---------- */
+  .lcg-nav{padding:12px 16px !important;gap:12px !important;}
+  .lcg-navlinks,.lcg-navcta{display:none !important;}
+  .lcg-burger{display:flex;align-items:center;justify-content:center;margin-left:auto;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);color:#F6F7FB;cursor:pointer;padding:0;transition:background .2s,transform .15s;-webkit-tap-highlight-color:transparent;}
+  .lcg-burger:active{transform:scale(.92);background:rgba(255,255,255,.1);}
+  .lcg-mobilemenu{display:flex;flex-direction:column;gap:6px;position:absolute;top:100%;left:0;right:0;padding:12px 16px 18px;background:rgba(13,14,19,.985);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.09);box-shadow:0 24px 48px rgba(0,0,0,.5);animation:lcgMenuIn .28s cubic-bezier(.2,.7,.2,1) both;max-height:calc(100vh - 72px);overflow-y:auto;}
+  .lcg-mobilemenu a{display:flex;align-items:center;gap:10px;min-height:48px;padding:4px 14px;border-radius:13px;color:#F6F7FB;text-decoration:none;font-weight:600;font-size:16.5px;font-family:Inter,sans-serif;transition:background .18s;}
+  .lcg-mobilemenu a:active{background:rgba(255,255,255,.08);}
+  .lcg-mobilemenu-cta{justify-content:center;margin-top:8px;background:#25D366 !important;color:#063018 !important;font-weight:700 !important;box-shadow:0 10px 26px rgba(37,211,102,.35);}
+
+  /* ---------- CONTENEDORES / ESPACIADO ---------- */
+  .lcg-container{padding-left:20px !important;padding-right:20px !important;}
+  #experiencias{padding:clamp(56px,12vw,76px) 20px !important;}
+  #poolfutbol,#cumpleanos,#porhora,#reserva,#galeria,#ubicacion,#faq{padding-top:clamp(56px,12vw,76px) !important;padding-bottom:clamp(56px,12vw,76px) !important;}
+  .lcg-ctafinal{padding-top:clamp(64px,14vw,88px) !important;padding-bottom:clamp(64px,14vw,88px) !important;}
+  .lcg-trust{gap:10px 18px !important;padding-top:16px !important;padding-bottom:16px !important;}
+
+  /* ---------- TIPOGRAFÍA ---------- */
+  #inicio h1{font-size:clamp(2.1rem,8.6vw,3rem) !important;}
+  #experiencias h2,#poolfutbol h2,#cumpleanos h2,#porhora h2,#reserva h2,#galeria h2,#ubicacion h2,#faq h2{font-size:clamp(1.85rem,7vw,2.4rem) !important;}
+  .lcg-ctafinal h2{font-size:clamp(2rem,8.4vw,2.9rem) !important;}
+  .lcg-ctafinal p{font-size:clamp(1rem,4.3vw,1.15rem) !important;}
+
+  /* ---------- HERO ---------- */
+  #inicio{display:block !important;min-height:auto !important;padding:40px 0 64px !important;}
+  #inicio::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(14,16,24,.62),rgba(14,16,24,.28) 45%,rgba(14,16,24,.66));pointer-events:none;}
+  .lcg-hero-bg{object-position:78% 42% !important;}
+  .lcg-hero-wrap{position:relative !important;inset:auto !important;pointer-events:auto !important;z-index:2;}
+  .lcg-hero-content{position:relative !important;left:auto !important;top:auto !important;max-width:100% !important;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 20px;}
+  .lcg-hero-mascot{order:0;width:min(58vw,240px) !important;max-width:58vw !important;height:auto !important;margin:0 0 18px !important;}
+  .lcg-hero-content h1{order:1;margin:0 !important;}
+  .lcg-hero-content > p{order:2;margin:16px auto 0 !important;font-size:clamp(1rem,4.3vw,1.125rem) !important;}
+  .lcg-hero-ctas{order:3;width:100%;flex-direction:column;margin-top:28px !important;gap:12px !important;}
+  .lcg-hero-ctas a{width:100%;justify-content:center;min-height:54px;}
+  .lcg-hero-stats{order:5;justify-content:center;margin-top:30px !important;gap:16px !important;}
+
+  /* ---------- GRIDS (tablet: 2 columnas) ---------- */
+  .lcg-grid-exp-top{grid-template-columns:repeat(2,1fr) !important;gap:16px !important;}
+  .lcg-grid-exp-top article:first-child{grid-row:auto !important;grid-column:1 / -1;min-height:340px !important;}
+  .lcg-grid-exp-bottom{grid-template-columns:repeat(2,1fr) !important;gap:16px !important;margin-top:16px !important;}
+  .lcg-grid-exp-bottom article:last-child{grid-column:1 / -1;}
+  .lcg-grid-promos{grid-template-columns:repeat(2,1fr) !important;gap:18px !important;}
+  .lcg-grid-promos article:last-child{grid-column:1 / -1;}
+  .lcg-grid-galeria{grid-template-columns:repeat(2,1fr) !important;grid-auto-rows:170px !important;gap:14px !important;}
+  .lcg-grid-pool,.lcg-grid-cumple,.lcg-grid-ubicacion{grid-template-columns:1fr !important;gap:34px !important;}
+  .lcg-grid-cumple > div:first-child{order:2;}
+  .lcg-grid-footer{grid-template-columns:1fr 1fr !important;gap:30px !important;}
+  .lcg-grid-footer > div:first-child{grid-column:1 / -1;}
+  .lcg-grid-form{gap:14px !important;}
+
+  /* ---------- CARDS / PANELES ---------- */
+  .lcg-form-card{padding:22px 16px !important;}
+  .lcg-grid-ubicacion > div:last-child{min-height:280px !important;}
+  .lcg-grid-ubicacion iframe{height:320px !important;}
+  #faq button{padding:16px 16px !important;font-size:16px !important;min-height:56px;}
+
+  /* ---------- FLOTANTE ---------- */
+  .lcg-float{right:14px !important;bottom:14px !important;padding:13px 18px 13px 15px !important;font-size:15px !important;}
+}
+
+@media (max-width:600px){
+  .lcg-grid-exp-top,.lcg-grid-exp-bottom,.lcg-grid-promos{grid-template-columns:1fr !important;}
+  .lcg-grid-exp-top article:first-child{min-height:300px !important;}
+  .lcg-grid-exp-bottom article:last-child,.lcg-grid-promos article:last-child{grid-column:auto;}
+  .lcg-grid-galeria{grid-template-columns:1fr !important;grid-auto-rows:150px !important;}
+  .lcg-grid-galeria > div:first-child{grid-column:auto !important;grid-row:auto !important;min-height:190px;}
+  .lcg-grid-form{grid-template-columns:1fr !important;}
+  .lcg-grid-footer{grid-template-columns:1fr !important;}
+  .lcg-grid-footer > div:first-child{grid-column:auto;}
+  .lcg-cta-row{flex-direction:column;}
+  .lcg-cta-row a{width:100%;justify-content:center;min-height:52px;}
+  .lcg-btn{display:flex !important;width:100% !important;justify-content:center !important;min-height:52px;}
+}
+
+@media (max-width:380px){
+  .lcg-container{padding-left:16px !important;padding-right:16px !important;}
+  #experiencias{padding-left:16px !important;padding-right:16px !important;}
+  .lcg-hero-content{padding:0 16px;}
+  .lcg-hero-stats{gap:12px !important;}
+  .lcg-float{font-size:14px !important;padding:12px 16px 12px 14px !important;}
+}
+
+/* standalone: estado del menú */
+.lcg-mobilemenu[data-open="0"]{display:none !important;}
+
+/* --- ajustes navbar glass + hero interactivo --- */
+.lcg-hero-content{pointer-events:auto;}
+.lcg-mobilemenu{pointer-events:auto;}
+.lcg-navlinks{flex:none !important;}
+@media (max-width:768px){
+  #inicio{padding-top:100px !important;}
+  .lcg-nav{padding:8px 12px !important;}
+  .lcg-burger{margin-left:0 !important;}
+  .lcg-mobilemenu{position:fixed;top:74px;left:12px;right:12px;border-radius:20px;border:1px solid rgba(255,255,255,.12);}
+}
+
+/* --- hover neon naranja en menu --- */
+.lcg-navlinks a{transition:color .22s ease, text-shadow .28s ease !important;}
+.lcg-navlinks a:hover{color:#FFB054 !important;text-shadow:0 0 8px rgba(255,140,0,.75),0 0 20px rgba(255,140,0,.45),0 0 38px rgba(255,120,0,.25);}
+.lcg-mobilemenu a:active{color:#FFB054 !important;text-shadow:0 0 10px rgba(255,140,0,.75);}
+</style>
+
+<div style="position:relative;background:#0E0F14;color:#F6F7FB;font-family:Inter,sans-serif;overflow-x:hidden;min-height:100vh;">
+
+<!-- ================= NAVBAR ================= -->
+<header style="position:fixed;top:12px;left:0;right:0;z-index:80;background:transparent;pointer-events:none;">
+  <nav class="lcg-nav" style="pointer-events:auto;width:fit-content;margin:0 auto;padding:10px 30px;display:flex;align-items:center;gap:28px;border-radius:999px;background:rgba(255,255,255,.07);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12);">
+    <div class="lcg-navlinks" style="flex:1;display:flex;align-items:center;justify-content:center;gap:30px;">
+      <a href="#experiencias" style="color:#9AA0AE;text-decoration:none;font-weight:600;font-size:15px;transition:color .2s;" style-hover="color:#F6F7FB;">Experiencias</a>
+      <a href="#poolfutbol" style="color:#9AA0AE;text-decoration:none;font-weight:600;font-size:15px;transition:color .2s;" style-hover="color:#F6F7FB;">PoolFútbol</a>
+      <a href="#cumpleanos" style="color:#9AA0AE;text-decoration:none;font-weight:600;font-size:15px;transition:color .2s;" style-hover="color:#F6F7FB;">Cumpleaños</a>
+      <a href="#porhora" style="color:#9AA0AE;text-decoration:none;font-weight:600;font-size:15px;transition:color .2s;" style-hover="color:#F6F7FB;">Jugá por hora</a>
+      <a href="#ubicacion" style="color:#9AA0AE;text-decoration:none;font-weight:600;font-size:15px;transition:color .2s;" style-hover="color:#F6F7FB;">Ubicación</a>
+    </div>
+    <button type="button" class="lcg-burger" aria-label="Abrir menú" aria-expanded="false">
+      <span class="lcg-burger-open"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></span><span class="lcg-burger-close" style="display:none;"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></span>
+    </button>
+  </nav>
+  <div class="lcg-mobilemenu" data-open="0" hidden>
+      <a href="#experiencias">Experiencias</a>
+      <a href="#poolfutbol">PoolFútbol</a>
+      <a href="#cumpleanos">Cumpleaños</a>
+      <a href="#porhora">Jugá por hora</a>
+      <a href="#ubicacion">Ubicación</a>
+      <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20reservar%20un%20turno%20para%20jugar.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" rel="noopener" class="lcg-mobilemenu-cta">
+        <svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33z"></path></svg>
+        Reservá por WhatsApp
+      </a>
+    </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="inicio" data-screen-label="Hero" style="position:relative;display:flex;align-items:center;min-height:calc(100vh - 86px);padding:92px 0 72px;flex-wrap:nowrap;background-color:#0E1018;">
+  <img src="/site/uploads/chatgpt-image-29-jun-2026-18_49_12-mqzr3bgf.png" alt="" aria-hidden="true" class="lcg-hero-bg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;">
+  <div class="lcg-hero-wrap" style="position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:0 40px;">
+    <div data-reveal="" class="lcg-hero-content" style="max-width:560px;position:relative;">
+      <img src="/site/chatgpt-image-29-jun-2026-16_46_57-mr28nwif.png" alt="La Chispa Gamer 1.8" class="lcg-hero-mascot" style="display: block; width: 415px; max-width: 66vw; height: 370px; margin: 0 0 16px; animation: lcgFloat 6s ease-in-out infinite; mix-blend-mode: screen; filter: drop-shadow(0 0 40px rgba(255,200,0,.3))">
+
+      <h1 style="font-family:Montserrat;font-weight:900;font-size:clamp(2rem,7vw,62px);line-height:1.05;letter-spacing:-.01em;margin:20px 0 0;color:#F6F7FB;text-shadow:0 4px 30px rgba(0,0,0,.6);">El nuevo punto gamer de <span style="color:#FFF601;text-shadow:0 0 32px rgba(255,45,142,.6);">Berazategui</span></h1>
+      <p style="font-size:19px;line-height:1.6;color:#D7DAE2;max-width:540px;margin:24px 0 0;text-shadow:0 2px 16px rgba(0,0,0,.7);">PS5, realidad virtual, baile y la única mesa de <span style="color:#9CFF2E;font-weight:600;">PoolFútbol</span> oficial del país. Vení con amigos, festejá tu cumple o jugá por hora.</p>
+      <div class="lcg-hero-ctas" style="display:flex;gap:15px;flex-wrap:wrap;margin-top:36px;">
+        <a href="#reserva" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#FF016D,#539AD9);color:#fff;font-weight:700;font-size:17px;text-decoration:none;padding:16px 28px;border-radius:16px;box-shadow:0 14px 36px rgba(255,45,142,.45);transition:transform .18s,box-shadow .18s;" style-hover="transform:translateY(-3px) scale(1.02);box-shadow:0 20px 46px rgba(255,45,142,.6);" style-focus="box-shadow:0 0 0 3px rgba(255,45,142,.5);">
+          <svg viewBox="0 0 32 32" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33zm7.31-9.96c-.4-.2-2.37-1.17-2.74-1.3-.37-.13-.64-.2-.9.2-.27.4-1.03 1.3-1.27 1.57-.23.27-.47.3-.87.1-.4-.2-1.69-.62-3.22-1.99-1.19-1.06-1.99-2.37-2.23-2.77-.23-.4-.02-.61.18-.81.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68l-.77-.01c-.27 0-.7.1-1.07.5-.37.4-1.4 1.37-1.4 3.34 0 1.97 1.43 3.87 1.63 4.14.2.27 2.82 4.3 6.83 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.17-.37-.27-.77-.47z"></path></svg>
+          Reservá por WhatsApp
+        </a>
+        <a href="#experiencias" style="display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.06);color:#FFFFFF;font-weight:600;font-size:17px;text-decoration:none;padding:16px 26px;border-radius:16px;border:1px solid rgba(255,255,255,.26);backdrop-filter:blur(8px);transition:background .18s,border-color .18s;" style-hover="background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.45);" style-focus="box-shadow:0 0 0 3px rgba(255,255,255,.3);">Ver experiencias</a>
+      </div>
+      <div class="lcg-hero-stats" style="display:flex;gap:28px;margin-top:38px;flex-wrap:wrap;">
+        <div><div style="font-family:Montserrat;font-weight:800;font-size:22px;color:#F6F7FB;">5+</div><div style="font-size:13px;color:#C0C5D0;">experiencias</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.2);"></div>
+        <div><div style="font-family:Montserrat;font-weight:800;font-size:22px;color:#F6F7FB;">6×3</div><div style="font-size:13px;color:#C0C5D0;">mesa PoolFútbol</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.2);"></div>
+        <div><div style="font-family:Montserrat;font-weight:800;font-size:22px;color:#F6F7FB;">Por hora</div><div style="font-size:13px;color:#C0C5D0;">o cumpleaños</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRUST STRIP ================= -->
+<section data-screen-label="Confianza" style="border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.018);">
+  <div class="lcg-container lcg-trust" style="max-width:1280px;margin:0 auto;padding:22px 40px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px 34px;">
+    <span style="display:inline-flex;align-items:center;gap:9px;color:#C8CCD6;font-weight:600;font-size:15px;"><span style="width:6px;height:6px;border-radius:50%;background:#FF2D8E;"></span>Nuevo en Berazategui</span>
+    <span style="color:rgba(255,255,255,.18);">•</span>
+    <span style="display:inline-flex;align-items:center;gap:9px;color:#C8CCD6;font-weight:600;font-size:15px;"><span style="width:6px;height:6px;border-radius:50%;background:#9CFF2E;"></span>Alquiler por hora</span>
+    <span style="color:rgba(255,255,255,.18);">•</span>
+    <span style="display:inline-flex;align-items:center;gap:9px;color:#C8CCD6;font-weight:600;font-size:15px;"><span style="width:6px;height:6px;border-radius:50%;background:#FF2D8E;"></span>Cumpleaños</span>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCIAS ================= -->
+<section id="experiencias" data-screen-label="Experiencias" style="position:relative;max-width:1280px;margin:0 auto;padding:112px 40px;overflow:hidden;">
+  <div data-reveal="" style="position:relative;max-width:680px;">
+    <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#FF2D8E;text-transform:uppercase;">Experiencias</div>
+    <h2 style="font-family:Montserrat;font-weight:800;font-size:46px;line-height:1.05;margin:14px 0 0;color:#F6F7FB;">Todo lo que podés jugar acá</h2>
+    <p style="font-size:18px;line-height:1.6;color:#9AA0AE;margin:16px 0 0;">Una sala pensada para venir con amigos y no parar. Elegí tu experiencia, reservá y caé.</p>
+  </div>
+  <!-- GRILLA SUPERIOR: VR destacado + 4 cards -->
+  <div data-reveal="" class="lcg-grid-exp-top" style="position:relative;margin-top:48px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:22px;">
+    <!-- VR feature (tall, 2 rows) -->
+    <article style="grid-row:1 / span 2;position:relative;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,rgba(25,211,255,.10),rgba(255,255,255,.03));min-height:440px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .25s,box-shadow .25s;" style-hover="transform:translateY(-6px);box-shadow:0 26px 56px rgba(25,211,255,.22);">
+      <img class="exp-bg" src="/site/experiencias/poolfutbol-exp.jpg" alt="PoolFútbol" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 38%,rgba(10,11,16,.55) 70%,rgba(10,11,16,.92));"></div>
+      <div style="position:relative;padding:26px;">
+        <div style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:rgba(25,211,255,.16);border:1px solid rgba(25,211,255,.4);color:#9DEBFF;font-weight:700;font-size:12px;letter-spacing:.04em;margin-bottom:12px;">DESTACADO</div>
+        <h3 style="font-family:Montserrat;font-weight:800;font-size:28px;margin:0;color:#F6F7FB;">PoolFútbol</h3>
+        <p style="font-size:15px;line-height:1.5;color:#D7DAE2;margin:8px 0 0;max-width:300px;">La única mesa de PoolFútbol oficial del país. La gran novedad del local.</p>
+      </div>
+    </article>
+    <!-- PS5 -->
+    <article style="position:relative;border-radius:26px;padding:26px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-6px);box-shadow:0 22px 48px rgba(255,45,142,.18);border-color:rgba(255,45,142,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;background:rgba(255,45,142,.12);border:1px solid rgba(255,45,142,.28);color:#FF2D8E;">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5.5"></rect><path d="M7 11v3M5.5 12.5h3"></path><circle cx="16.5" cy="11.5" r="1"></circle><circle cx="18.5" cy="14" r="1"></circle></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/playstation-5.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:21px;margin:18px 0 0;color:#F6F7FB;">PlayStation 5</h3>
+      <p style="font-size:14.5px;line-height:1.5;color:#9AA0AE;margin:7px 0 0;">FIFA, Fortnite y los últimos lanzamientos en pantalla grande.</p>
+    </article>
+    <!-- Nintendo Switch -->
+    <article style="position:relative;border-radius:26px;padding:26px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-6px);box-shadow:0 22px 48px rgba(190,180,30,.18);border-color:rgba(190,180,30,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;background:rgba(190,180,30,.12);border:1px solid rgba(190,180,30,.3);color:#C8BA20;">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="7.5" height="12" rx="3.5"></rect><rect x="14.5" y="6" width="7.5" height="12" rx="3.5"></rect><path d="M9.5 12h5"></path><circle cx="5.8" cy="10" r="1" fill="currentColor" stroke="none"></circle><circle cx="18.2" cy="10" r="1" fill="currentColor" stroke="none"></circle><circle cx="18.2" cy="14" r="1" fill="currentColor" stroke="none"></circle><circle cx="20.5" cy="12" r="1" fill="currentColor" stroke="none"></circle></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/nintendo-switch.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:21px;margin:18px 0 0;color:#F6F7FB;">Nintendo Switch</h3>
+      <p style="font-size:14.5px;line-height:1.5;color:#9AA0AE;margin:7px 0 0;">Diversión portátil y multijugador para jugar con amigos.</p>
+    </article>
+    <!-- Jugar Online -->
+    <article style="position:relative;border-radius:26px;padding:26px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-6px);box-shadow:0 22px 48px rgba(25,211,255,.18);border-color:rgba(25,211,255,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;background:rgba(25,211,255,.12);border:1px solid rgba(25,211,255,.28);color:#19D3FF;">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3"></path></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/jugar-online.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:21px;margin:18px 0 0;color:#F6F7FB;">Jugar Online</h3>
+      <p style="font-size:14.5px;line-height:1.5;color:#9AA0AE;margin:7px 0 0;">Conectate, competí y jugá con amigos en tiempo real.</p>
+    </article>
+    <!-- Arcades Retro -->
+    <article style="position:relative;border-radius:26px;padding:26px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-6px);box-shadow:0 22px 48px rgba(255,45,142,.18);border-color:rgba(255,45,142,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;background:rgba(255,45,142,.12);border:1px solid rgba(255,45,142,.28);color:#FF2D8E;">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="9" rx="2"></rect><path d="M12 11v11M8 14h8"></path><circle cx="7" cy="19.5" r="2"></circle><circle cx="17" cy="19.5" r="2"></circle></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/arcade-retro.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:21px;margin:18px 0 0;color:#F6F7FB;">Arcades Retro</h3>
+      <p style="font-size:14.5px;line-height:1.5;color:#9AA0AE;margin:7px 0 0;">Más de 15 mil juegos clásicos para revivir la nostalgia gamer.</p>
+    </article>
+  </div>
+
+  <!-- FILA INFERIOR: 5 cards pequeñas -->
+  <div data-reveal="" class="lcg-grid-exp-bottom" style="margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:22px;">
+    <!-- Sillas Gamer Pro -->
+    <article style="position:relative;border-radius:22px;padding:20px 18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(130,90,255,.18);border-color:rgba(130,90,255,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(130,90,255,.12);border:1px solid rgba(130,90,255,.28);color:#8A5AFF;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9z"></path><path d="M8 21h8M12 16v5"></path></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/silla-gamer-pro.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:15px;margin:13px 0 0;color:#F6F7FB;">Sillas Gamer Pro</h3>
+      <p style="font-size:12.5px;line-height:1.5;color:#9AA0AE;margin:5px 0 0;">Máxima comodidad para largas sesiones de juego.</p>
+    </article>
+    <!-- Simuladores F1 -->
+    <article style="position:relative;border-radius:22px;padding:20px 18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(255,165,50,.18);border-color:rgba(255,165,50,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,165,50,.12);border:1px solid rgba(255,165,50,.28);color:#FFA532;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"></path></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/simulador-f1.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:15px;margin:13px 0 0;color:#F6F7FB;">Simuladores F1</h3>
+      <p style="font-size:12.5px;line-height:1.5;color:#9AA0AE;margin:5px 0 0;">Sentí la experiencia de manejar como un piloto profesional.</p>
+    </article>
+    <!-- Pump It Up -->
+    <article style="position:relative;border-radius:22px;padding:20px 18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(255,45,142,.18);border-color:rgba(255,45,142,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,45,142,.12);border:1px solid rgba(255,45,142,.28);color:#FF2D8E;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2.2V15"></path><circle cx="6" cy="18" r="2.6"></circle><circle cx="16" cy="15.8" r="2.6"></circle></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/pump-it-up.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:15px;margin:13px 0 0;color:#F6F7FB;">Pump It Up</h3>
+      <p style="font-size:12.5px;line-height:1.5;color:#9AA0AE;margin:5px 0 0;">Bailá, transpirá y batí el récord con tus amigos.</p>
+    </article>
+    <!-- PoolFútbol -->
+    <article style="position:relative;border-radius:22px;padding:20px 18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(156,255,46,.18);border-color:rgba(156,255,46,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(156,255,46,.12);border:1px solid rgba(156,255,46,.3);color:#9CFF2E;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="9" rx="4"></rect><path d="M9 17c.4-1.4 1.4-2.4 3-2.4s2.6 1 3 2.4"></path></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/realidad-virtual.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:15px;margin:13px 0 0;color:#F6F7FB;">Realidad Virtual</h3>
+      <p style="font-size:12.5px;line-height:1.5;color:#9AA0AE;margin:5px 0 0;">Ponete los lentes y metete adentro del juego. Pura adrenalina.</p>
+    </article>
+    <!-- Metegol -->
+    <article style="position:relative;border-radius:22px;padding:20px 18px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s,border-color .25s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(255,45,142,.18);border-color:rgba(255,45,142,.35);">
+      <div style="display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,45,142,.12);border:1px solid rgba(255,45,142,.28);color:#FF2D8E;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="2.5"></rect><path d="M3 12h18M9 4.5V9M15 15v4.5"></path><circle cx="9" cy="12" r="1.1" fill="currentColor"></circle><circle cx="15" cy="12" r="1.1" fill="currentColor"></circle></svg>
+      </div>
+      <img class="exp-bg" src="/site/experiencias/metegol.jpg" alt="" loading="lazy"><div class="exp-ov"></div>
+      <h3 style="font-family:Montserrat;font-weight:800;font-size:15px;margin:13px 0 0;color:#F6F7FB;">Metegol</h3>
+      <p style="font-size:12.5px;line-height:1.5;color:#9AA0AE;margin:5px 0 0;">El clásico de siempre para picar entre partida y partida.</p>
+    </article>
+  </div>
+
+  <!-- CTAs -->
+  <div data-reveal="" class="lcg-cta-row" style="margin-top:40px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="#reserva" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#FF016D,#FF5BA6);color:#fff;font-weight:700;font-size:16px;text-decoration:none;padding:15px 28px;border-radius:15px;box-shadow:0 14px 32px rgba(255,45,142,.4);transition:transform .18s,box-shadow .18s;" style-hover="transform:translateY(-2px);box-shadow:0 20px 44px rgba(255,45,142,.56);">
+      <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33zm7.31-9.96c-.4-.2-2.37-1.17-2.74-1.3-.37-.13-.64-.2-.9.2-.27.4-1.03 1.3-1.27 1.57-.23.27-.47.3-.87.1-.4-.2-1.69-.62-3.22-1.99-1.19-1.06-1.99-2.37-2.23-2.77-.23-.4-.02-.61.18-.81.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68l-.77-.01c-.27 0-.7.1-1.07.5-.37.4-1.4 1.37-1.4 3.34 0 1.97 1.43 3.87 1.63 4.14.2.27 2.82 4.3 6.83 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.17-.37-.27-.77-.47z"></path></svg>
+      Reservá por WhatsApp
+    </a>
+    <a href="#porhora" style="display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.06);color:#F6F7FB;font-weight:600;font-size:16px;text-decoration:none;padding:15px 26px;border-radius:15px;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);transition:background .18s,border-color .18s;" style-hover="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);">Ver precios y promos</a>
+  </div>
+</section>
+
+<!-- ================= POOLFÚTBOL ================= -->
+<section id="poolfutbol" data-screen-label="PoolFutbol" style="position:relative;padding:104px 0;border-top:1px solid rgba(255,255,255,.06);background:linear-gradient(160deg,rgba(25,211,255,.07),rgba(156,255,46,.04));overflow:hidden;">
+  <div style="position:absolute;top:-10%;left:50%;width:760px;height:420px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(25,211,255,.18),transparent 70%);pointer-events:none;"></div>
+  <div class="lcg-container lcg-grid-pool" style="position:relative;max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1.06fr;gap:52px;align-items:center;">
+    <div data-reveal="">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(25,211,255,.12);border:1px solid rgba(25,211,255,.35);color:#9DEBFF;font-weight:700;font-size:12.5px;letter-spacing:.06em;">EL DIFERENCIAL · SOLO ACÁ</div>
+      <h2 style="font-family:Montserrat;font-weight:900;font-size:48px;line-height:1.04;margin:18px 0 0;color:#F6F7FB;">PoolFútbol:<br><span style="color:#19D3FF;text-shadow:0 0 28px rgba(25,211,255,.4);">solo acá</span></h2>
+      <p style="font-size:18px;line-height:1.65;color:#C0C5D0;margin:20px 0 0;max-width:480px;">La única mesa de PoolFútbol oficial del país: <span style="color:#9CFF2E;font-weight:600;">6×3 metros</span> de pura cancha. Pateás, embocás y la rompés con tus amigos. Una experiencia que no vas a encontrar en ningún otro lado.</p>
+      <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20reservar%20una%20partida%20de%20PoolF%C3%BAtbol.%20%C2%BFQu%C3%A9%20disponibilidad%20tienen%3F" target="_blank" rel="noopener" class="lcg-btn" style="display:inline-flex;align-items:center;gap:10px;margin-top:30px;background:#19D3FF;color:#062b34;font-weight:700;font-size:16.5px;text-decoration:none;padding:15px 26px;border-radius:15px;box-shadow:0 14px 34px rgba(25,211,255,.35);transition:transform .18s,box-shadow .18s;" style-hover="transform:translateY(-3px);box-shadow:0 20px 44px rgba(25,211,255,.5);">
+        <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33zm7.31-9.96c-.4-.2-2.37-1.17-2.74-1.3-.37-.13-.64-.2-.9.2-.27.4-1.03 1.3-1.27 1.57-.23.27-.47.3-.87.1-.4-.2-1.69-.62-3.22-1.99-1.19-1.06-1.99-2.37-2.23-2.77-.23-.4-.02-.61.18-.81.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68l-.77-.01c-.27 0-.7.1-1.07.5-.37.4-1.4 1.37-1.4 3.34 0 1.97 1.43 3.87 1.63 4.14.2.27 2.82 4.3 6.83 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.17-.37-.27-.77-.47z"></path></svg>
+        Reservá tu partida
+      </a>
+    </div>
+    <div data-reveal="" style="position:relative;border-radius:26px;overflow:hidden;border:1px solid rgba(25,211,255,.22);box-shadow:0 34px 70px rgba(0,0,0,.5);">
+      <video src="/site/uploads/Subtle_cinematic_loop_neon_ra (1).mp4" autoplay="" loop="" muted="" playsinline="" style="width:100%;height:auto;display:block;"></video>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,16,.04),rgba(10,11,16,.32));pointer-events:none;"></div>
+      <div style="position:absolute;bottom:16px;left:16px;display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:10px;background:rgba(10,11,16,.7);backdrop-filter:blur(8px);border:1px solid rgba(25,211,255,.3);font-size:13px;font-weight:600;color:#C8CCD6;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#19D3FF;box-shadow:0 0 8px #19D3FF;"></span>Mesa PoolFútbol 6×3 · en vivo
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CUMPLEAÑOS ================= -->
+<section id="cumpleanos" data-screen-label="Cumpleanos" style="position:relative;padding:104px 0;overflow:hidden;">
+  <div style="position:absolute;bottom:-20%;left:-8%;width:680px;height:680px;background:radial-gradient(circle,rgba(255,45,142,.20),transparent 66%);pointer-events:none;"></div>
+  <div class="lcg-container lcg-grid-cumple" style="position:relative;max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;">
+    <div data-reveal="" style="position:relative;display:flex;justify-content:center;">
+      <div style="position:absolute;inset:8% 14%;background:radial-gradient(circle,rgba(255,45,142,.35),transparent 68%);filter:blur(6px);"></div>
+      <img src="/site/uploads/ChatGPT Image 30 jun 2026, 03_22_27.png" alt="Festejá tu cumpleaños en La Chispa Gamer" loading="lazy" decoding="async" style="position:relative;width:84%;max-width:440px;height:auto;display:block;filter:drop-shadow(0 30px 50px rgba(0,0,0,.6));animation:lcgFloat 6s ease-in-out infinite;">
+    </div>
+    <div data-reveal="">
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#FF2D8E;text-transform:uppercase;">Cumpleaños &amp; Eventos</div>
+      <h2 style="font-family:Montserrat;font-weight:900;font-size:46px;line-height:1.05;margin:14px 0 0;color:#F6F7FB;">El cumpleaños que<br>no se olvida más</h2>
+      <p style="font-size:18px;line-height:1.65;color:#9AA0AE;margin:18px 0 0;max-width:470px;">Festejá con tus amigos entre PS5, realidad virtual, baile y PoolFútbol. Nosotros armamos todo: vos solo traés las ganas de jugar.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;margin:26px 0 0;">
+        <div style="display:flex;align-items:center;gap:11px;font-size:16px;color:#D7DAE2;"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:rgba(255,45,142,.16);color:#FF2D8E;flex-shrink:0;"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"></path></svg></span>Espacio exclusivo para tu grupo</div>
+        <div style="display:flex;align-items:center;gap:11px;font-size:16px;color:#D7DAE2;"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:rgba(255,45,142,.16);color:#FF2D8E;flex-shrink:0;"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"></path></svg></span>Todas las experiencias incluidas</div>
+        <div style="display:flex;align-items:center;gap:11px;font-size:16px;color:#D7DAE2;"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:rgba(255,45,142,.16);color:#FF2D8E;flex-shrink:0;"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"></path></svg></span>Combos para distintas edades</div>
+      </div>
+      <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20info%20para%20festejar%20un%20cumplea%C3%B1os.%20%C2%BFMe%20pasan%20los%20detalles%3F" target="_blank" rel="noopener" class="lcg-btn" style="display:inline-flex;align-items:center;gap:10px;margin-top:30px;background:linear-gradient(135deg,#FF2D8E,#FF5BA6);color:#fff;font-weight:700;font-size:16.5px;text-decoration:none;padding:15px 26px;border-radius:15px;box-shadow:0 14px 34px rgba(255,45,142,.36);transition:transform .18s,box-shadow .18s;" style-hover="transform:translateY(-3px);box-shadow:0 20px 44px rgba(255,45,142,.52);">
+        <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33zm7.31-9.96c-.4-.2-2.37-1.17-2.74-1.3-.37-.13-.64-.2-.9.2-.27.4-1.03 1.3-1.27 1.57-.23.27-.47.3-.87.1-.4-.2-1.69-.62-3.22-1.99-1.19-1.06-1.99-2.37-2.23-2.77-.23-.4-.02-.61.18-.81.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68l-.77-.01c-.27 0-.7.1-1.07.5-.37.4-1.4 1.37-1.4 3.34 0 1.97 1.43 3.87 1.63 4.14.2.27 2.82 4.3 6.83 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.17-.37-.27-.77-.47z"></path></svg>
+        Pedí info de cumpleaños
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JUGÁ POR HORA / PROMOS ================= -->
+<section id="porhora" data-screen-label="PorHora" style="position:relative;padding:104px 0;border-top:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.018);">
+  <div class="lcg-container" style="max-width:1280px;margin:0 auto;padding:0 40px;">
+    <div data-reveal="" style="text-align:center;max-width:620px;margin:0 auto;">
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#9CFF2E;text-transform:uppercase;">Jugá por hora</div>
+      <h2 style="font-family:Montserrat;font-weight:900;font-size:46px;line-height:1.05;margin:14px 0 0;color:#F6F7FB;">Vení cuando quieras,<br>jugá lo que quieras</h2>
+      <p style="font-size:18px;line-height:1.6;color:#9AA0AE;margin:16px 0 0;">Sin vueltas: elegí tu turno, reservá por WhatsApp y caé a jugar. Ideal para una tarde con amigos.</p>
+    </div>
+    <div data-reveal="" class="lcg-grid-promos" style="margin-top:46px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;">
+      <!-- Promo 1 -->
+      <article style="position:relative;border-radius:24px;padding:30px 26px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s;" style-hover="transform:translateY(-6px);box-shadow:0 24px 50px rgba(0,0,0,.4);">
+        <h3 style="font-family:Montserrat;font-weight:800;font-size:22px;margin:0;color:#F6F7FB;">Hora de juego</h3>
+        <p style="font-size:14.5px;color:#9AA0AE;margin:8px 0 0;line-height:1.5;">Alquilá por hora la experiencia que más te guste.</p>
+        <div style="margin:22px 0 0;font-family:Montserrat;font-weight:800;font-size:30px;color:#F6F7FB;">Desde <span style="color:#9CFF2E;">$—</span></div>
+        <div style="font-size:13px;color:#9AA0AE;margin-top:2px;">por hora · consultá precio</div>
+        <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20reservar%20una%20hora%20de%20juego.%20%C2%BFQu%C3%A9%20turnos%20tienen%20libres%3F" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:9px;margin-top:22px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#F6F7FB;font-weight:700;font-size:15px;text-decoration:none;padding:13px;border-radius:13px;transition:background .18s;" style-hover="background:rgba(255,255,255,.12);">Reservá tu hora</a>
+      </article>
+      <!-- Promo 2 (destacada) -->
+      <article style="position:relative;border-radius:24px;padding:30px 26px;border:1px solid rgba(156,255,46,.4);background:linear-gradient(180deg,rgba(156,255,46,.10),rgba(255,255,255,.03));backdrop-filter:blur(16px);box-shadow:0 24px 56px rgba(156,255,46,.12);transition:transform .25s,box-shadow .25s;" style-hover="transform:translateY(-8px);box-shadow:0 30px 64px rgba(156,255,46,.22);">
+        <div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:#9CFF2E;color:#163800;font-weight:800;font-size:11.5px;letter-spacing:.06em;white-space:nowrap;">⚡ MÁS ELEGIDO</div>
+        <h3 style="font-family:Montserrat;font-weight:800;font-size:22px;margin:6px 0 0;color:#F6F7FB;">Combo amigos</h3>
+        <p style="font-size:14.5px;color:#C0C5D0;margin:8px 0 0;line-height:1.5;">Pack de horas para venir en grupo y rotar por todas las experiencias.</p>
+        <div style="margin:22px 0 0;font-family:Montserrat;font-weight:800;font-size:30px;color:#F6F7FB;">Hasta <span style="color:#9CFF2E;">6</span></div>
+        <div style="font-size:13px;color:#9AA0AE;margin-top:2px;">personas · consultá precio</div>
+        <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20LaChispaGamer%21%20Quiero%20averiguar%20el%20%22Pack%20de%20horas%22%20con%20-%20COMBO%20AMIGOS%20-%20y%20probar%20todas%20las%20experiencias%20del%20sal%C3%B3n%21" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:9px;margin-top:22px;background:#9CFF2E;color:#163800;font-weight:800;font-size:15px;text-decoration:none;padding:13px;border-radius:13px;transition:transform .18s;" style-hover="transform:scale(1.03);">Reservá el combo</a>
+      </article>
+      <!-- Promo 3 -->
+      <article style="position:relative;border-radius:24px;padding:30px 26px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);backdrop-filter:blur(16px);transition:transform .25s,box-shadow .25s;" style-hover="transform:translateY(-6px);box-shadow:0 24px 50px rgba(0,0,0,.4);">
+        <h3 style="font-family:Montserrat;font-weight:800;font-size:22px;margin:0;color:#F6F7FB;">Partida PoolFútbol</h3>
+        <p style="font-size:14.5px;color:#9AA0AE;margin:8px 0 0;line-height:1.5;">Reservá la mesa única del país por turno y jugá tu torneo.</p>
+        <div style="margin:22px 0 0;font-family:Montserrat;font-weight:800;font-size:30px;color:#F6F7FB;">Mesa <span style="color:#19D3FF;">6×3</span></div>
+        <div style="font-size:13px;color:#9AA0AE;margin-top:2px;">por turno · consultá precio</div>
+        <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20reservar%20una%20partida%20de%20PoolF%C3%BAtbol.%20%C2%BFQu%C3%A9%20disponibilidad%20tienen%3F" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:9px;margin-top:22px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#F6F7FB;font-weight:700;font-size:15px;text-decoration:none;padding:13px;border-radius:13px;transition:background .18s;" style-hover="background:rgba(255,255,255,.12);">Reservá la mesa</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESERVÁ ================= -->
+<section id="reserva" data-screen-label="Reserva" style="position:relative;padding:104px 0;overflow:hidden;">
+  <div style="position:absolute;top:0;right:0;width:560px;height:560px;background:radial-gradient(circle,rgba(25,211,255,.16),transparent 66%);pointer-events:none;"></div>
+  <div class="lcg-container" style="position:relative;max-width:760px;margin:0 auto;padding:0 40px;">
+    <div data-reveal="" style="text-align:center;">
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#19D3FF;text-transform:uppercase;">Reservá</div>
+      <h2 style="font-family:Montserrat;font-weight:900;font-size:44px;line-height:1.05;margin:14px 0 0;color:#F6F7FB;">Armá tu reserva en 30 segundos</h2>
+      <p style="font-size:17px;color:#9AA0AE;margin:14px 0 0;">Completá los datos y te abrimos el chat con todo escrito.</p>
+    </div>
+    <div data-reveal="" class="lcg-form-card" style="margin-top:38px;border-radius:28px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);backdrop-filter:blur(20px);padding:34px;box-shadow:0 30px 70px rgba(0,0,0,.45);">
+      <div class="lcg-grid-form" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <label style="grid-column:1 / -1;display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">Tu nombre</span>
+          <input type="text" id="lcg-f-nombre" placeholder="Ej: Lucas" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;">
+        </label>
+        <label style="grid-column:1 / -1;display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">WhatsApp / Teléfono</span>
+          <input type="tel" id="lcg-f-tel" placeholder="Ej: 11 5555 5555" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;">
+        </label>
+        <label style="display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">Día</span>
+          <input type="date" id="lcg-f-dia" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;">
+        </label>
+        <label style="display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">Horario</span>
+          <input type="time" id="lcg-f-horario" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;">
+        </label>
+        <label style="display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">Experiencia</span>
+          <select id="lcg-f-exp" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;">
+            <option>PlayStation 5</option>
+            <option>Realidad Virtual</option>
+            <option>PoolFútbol</option>
+            <option>Cumpleaños</option>
+            <option>Evento</option>
+          </select>
+        </label>
+        <label style="display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">Cantidad de personas</span>
+          <input type="number" min="1" id="lcg-f-personas" placeholder="Ej: 4" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;">
+        </label>
+        <label style="grid-column:1 / -1;display:block;">
+          <span style="display:block;font-size:13px;font-weight:600;color:#C0C5D0;margin-bottom:8px;">Código de referido <span style="color:#9AA0AE;font-weight:400;">(opcional · te da descuento)</span></span>
+          <input type="text" id="lcg-f-codigo" placeholder="Ej: LACHISPAGAMER" style="width:100%;background:rgba(10,11,16,.55);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:14px 15px;color:#F6F7FB;font-size:15.5px;color-scheme:dark;text-transform:uppercase;">
+        </label>
+      </div>
+      <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20reservar%20una%20hora%20de%20juego.%20%C2%BFQu%C3%A9%20turnos%20tienen%20libres%3F" id="lcg-f-submit" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:11px;margin-top:24px;background:linear-gradient(135deg,#FF2D8E,#FF5BA6);color:#fff;font-weight:800;font-size:18px;text-decoration:none;padding:17px;border-radius:16px;box-shadow:0 16px 40px rgba(255,45,142,.4);transition:transform .18s,box-shadow .18s;" style-hover="transform:translateY(-3px);box-shadow:0 22px 50px rgba(255,45,142,.56);">
+        <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33zm7.31-9.96c-.4-.2-2.37-1.17-2.74-1.3-.37-.13-.64-.2-.9.2-.27.4-1.03 1.3-1.27 1.57-.23.27-.47.3-.87.1-.4-.2-1.69-.62-3.22-1.99-1.19-1.06-1.99-2.37-2.23-2.77-.23-.4-.02-.61.18-.81.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68l-.77-.01c-.27 0-.7.1-1.07.5-.37.4-1.4 1.37-1.4 3.34 0 1.97 1.43 3.87 1.63 4.14.2.27 2.82 4.3 6.83 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.11 2.37-.97 2.7-1.9.33-.94.33-1.74.23-1.9-.1-.17-.37-.27-.77-.47z"></path></svg>
+        Reservar por WhatsApp
+      </a>
+      <p style="text-align:center;font-size:13.5px;color:#9AA0AE;margin:14px 0 0;">Te abrimos el chat con tu pedido ya escrito.</p>
+    </div>
+
+    <!-- CTA de cumpleaños: lista de invitados (aparece solo si eligen Cumpleaños) -->
+    <div id="lcg-invitados-cta" style="display:none;margin-top:20px;border-radius:24px;border:1px solid rgba(255,45,142,.32);background:linear-gradient(135deg,rgba(255,45,142,.10),rgba(25,211,255,.08));backdrop-filter:blur(16px);padding:26px 28px;box-shadow:0 24px 60px rgba(0,0,0,.4);">
+      <div style="display:flex;align-items:center;gap:10px;font-family:Montserrat;font-weight:900;font-size:20px;color:#F6F7FB;">🎂 ¿Es un cumpleaños?</div>
+      <p style="font-size:14.5px;color:#C0C5D0;line-height:1.6;margin:10px 0 0;">Una vez que coordinás la fecha por WhatsApp, cargá la <b>lista de invitados</b>. Con eso generamos una <b>tarjetita de invitación</b> para cada nene (mismo diseño, solo cambia el nombre) — tu regalito físico. Cada invitado lleva su <b>adulto responsable y teléfono</b>.</p>
+      <a href="/site/invitados.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;margin-top:18px;background:linear-gradient(135deg,#FF2D8E,#FF5BA6);color:#fff;font-weight:800;font-size:16px;text-decoration:none;padding:14px 24px;border-radius:14px;box-shadow:0 14px 34px rgba(255,45,142,.4);">📝 Cargar lista de invitados y generar tarjetas</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALERÍA ================= -->
+<section id="galeria" data-screen-label="Galeria" style="position:relative;padding:104px 0;border-top:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.018);">
+  <div class="lcg-container" style="max-width:1280px;margin:0 auto;padding:0 40px;">
+    <div data-reveal="" style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+      <div>
+        <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#FF2D8E;text-transform:uppercase;">Galería</div>
+        <h2 style="font-family:Montserrat;font-weight:900;font-size:42px;line-height:1.05;margin:12px 0 0;color:#F6F7FB;">Así se vive La Chispa</h2>
+      </div>
+      <span style="font-size:14px;color:#9AA0AE;">Fotos y videos reales del local</span>
+    </div>
+    <div data-reveal="" class="lcg-grid-galeria" style="margin-top:36px;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:18px;">
+      <div class="gal-item" style="grid-column:span 2;grid-row:span 2;">
+        <img src="/site/galeria/sala-principal.jpg" alt="" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="/site/galeria/poolfutbol.jpg" alt="" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="/site/galeria/cumpleanos.jpg" alt="" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="/site/galeria/vr.jpg" alt="" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="/site/galeria/ps5.jpg" alt="" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UBICACIÓN ================= -->
+<section id="ubicacion" data-screen-label="Ubicacion" style="position:relative;padding:104px 0;">
+  <div class="lcg-container lcg-grid-ubicacion" style="max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1.1fr;gap:44px;align-items:stretch;">
+    <div data-reveal="">
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#19D3FF;text-transform:uppercase;">Ubicación</div>
+      <h2 style="font-family:Montserrat;font-weight:900;font-size:42px;line-height:1.05;margin:12px 0 0;color:#F6F7FB;">Estamos en<br>Berazategui Centro</h2>
+      <div style="margin:26px 0 0;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;align-items:flex-start;gap:13px;">
+          <span style="display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:12px;background:rgba(25,211,255,.12);border:1px solid rgba(25,211,255,.28);color:#19D3FF;flex-shrink:0;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg></span>
+          <div><div style="font-weight:700;font-size:17px;color:#F6F7FB;">Av. 14 N°4143</div><div style="font-size:14.5px;color:#9AA0AE;">Berazategui Centro, Buenos Aires</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:13px;">
+          <span style="display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:12px;background:rgba(25,211,255,.12);border:1px solid rgba(25,211,255,.28);color:#19D3FF;flex-shrink:0;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg></span>
+          <div><div style="font-weight:700;font-size:17px;color:#F6F7FB;">Horarios</div><div style="font-size:14.5px;color:#9AA0AE;">Lun a Vie: — · Sáb y Dom: — <span style="opacity:.7;">(a confirmar)</span></div></div>
+        </div>
+      </div>
+      <a href="https://www.google.com/maps?q=-34.764437,-58.213813" target="_blank" rel="noopener" class="lcg-btn" style="display:inline-flex;align-items:center;gap:10px;margin-top:30px;background:#19D3FF;color:#062b34;font-weight:700;font-size:16px;text-decoration:none;padding:15px 26px;border-radius:15px;box-shadow:0 14px 34px rgba(25,211,255,.32);transition:transform .18s,box-shadow .18s;" style-hover="transform:translateY(-3px);box-shadow:0 20px 44px rgba(25,211,255,.5);">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3Z"></path><path d="M9 3v15M15 6v15"></path></svg>
+        Cómo llegar
+      </a>
+    </div>
+    <div data-reveal="" style="border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.1);min-height:360px;box-shadow:0 30px 60px rgba(0,0,0,.45);">
+      <iframe title="Mapa La Chispa Gamer" src="https://maps.google.com/maps?q=-34.764437,-58.213813&amp;hl=es&amp;z=17&amp;output=embed" width="100%" height="400" style="width:100%;height:400px;display:block;border:0;filter:grayscale(.3) contrast(1.1) brightness(.9);" loading="lazy" allowfullscreen=""></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" data-screen-label="FAQ" style="position:relative;padding:104px 0;border-top:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.018);">
+  <div class="lcg-container" style="max-width:840px;margin:0 auto;padding:0 40px;">
+    <div data-reveal="" style="text-align:center;">
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.22em;color:#FF2D8E;text-transform:uppercase;">Preguntas frecuentes</div>
+      <h2 style="font-family:Montserrat;font-weight:900;font-size:42px;line-height:1.05;margin:12px 0 0;color:#F6F7FB;">¿Te quedó alguna duda?</h2>
+    </div>
+    <div data-reveal="" style="margin-top:38px;display:flex;flex-direction:column;gap:14px;">
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="true" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Cómo reservo?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(180deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;">Súper fácil: escribinos por WhatsApp con el botón de reserva o completá el formulario de la sección "Reservá". Te abrimos el chat con tu pedido ya escrito y coordinamos el turno al toque.</div>
+        </div>
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="false" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Cuánto sale la hora de juego?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(0deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;" hidden>El alquiler por hora arranca desde un precio accesible y varía según la experiencia y la cantidad de personas. Consultanos por WhatsApp y te pasamos los valores actualizados del día.</div>
+        </div>
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="false" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Qué incluye un cumpleaños?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(0deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;" hidden>Un espacio exclusivo para tu grupo con acceso a todas las experiencias: PS5, realidad virtual, baile, metegol y PoolFútbol. Armamos el combo según las edades y la cantidad de invitados.</div>
+        </div>
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="false" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Desde qué edad puedo ir?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(0deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;" hidden>Tenemos experiencias para todas las edades. Los más chicos pueden venir acompañados por un adulto. Si tenés dudas con una experiencia puntual (como la VR), consultanos y te orientamos.</div>
+        </div>
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="false" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Qué es el PoolFútbol?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(0deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;" hidden>Es la única mesa de PoolFútbol oficial del país: una cancha gigante de 6×3 metros donde pateás y embocás pelotas como en un pool, pero con los pies. Una experiencia que solo encontrás en La Chispa Gamer.</div>
+        </div>
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="false" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Qué medios de pago aceptan?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(0deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;" hidden>Aceptamos efectivo, transferencia y los principales medios digitales. Confirmanos por WhatsApp al momento de reservar y coordinamos la forma de pago que más te convenga.</div>
+        </div>
+      <div class="lcg-faq-item" style="border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);overflow:hidden;">
+          <button type="button" class="lcg-faq-btn" aria-expanded="false" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:0;cursor:pointer;padding:20px 22px;color:#F6F7FB;font-family:Inter,sans-serif;font-weight:700;font-size:17px;">
+            <span>¿Cuáles son los horarios?</span>
+            <span class="lcg-faq-chev" style="flex-shrink:0;display:flex;transition:transform .25s;transform:rotate(0deg);color:#FF2D8E;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+          </button>
+          <div class="lcg-faq-a" style="padding:0 22px 22px;font-size:15.5px;line-height:1.6;color:#9AA0AE;" hidden>Estamos abriendo el nuevo local en Berazategui Centro y vamos a confirmar los horarios definitivos muy pronto. Escribinos por WhatsApp y te decimos los turnos disponibles para el día que quieras venir.</div>
+        </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer data-screen-label="Footer" style="border-top:1px solid rgba(255,255,255,.08);background:#0a0b10;">
+  <div class="lcg-container lcg-grid-footer" style="max-width:1280px;margin:0 auto;padding:54px 40px 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="/site/footer-logo.png" alt="La Chispa Gamer 1.8" style="height:44px;width:auto;display:block;">
+        <span style="font-family:Montserrat;font-weight:900;font-size:15px;letter-spacing:.05em;color:#F6F7FB;">LA CHISPA GAMER <span style="color:#9CFF2E;">1.8</span></span>
+      </div>
+      <p style="font-size:14.5px;color:#9AA0AE;margin:16px 0 0;max-width:320px;line-height:1.6;">El nuevo punto gamer de Berazategui. PS5, realidad virtual, baile y la única mesa de PoolFútbol del país.</p>
+    </div>
+    <div>
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.1em;color:#F6F7FB;text-transform:uppercase;">Local</div>
+      <div style="font-size:14.5px;color:#9AA0AE;margin-top:14px;line-height:1.9;">Av. 14 N°4143<br>Berazategui Centro<br>Horarios: a confirmar</div>
+    </div>
+    <div>
+      <div style="font-family:Montserrat;font-weight:700;font-size:13px;letter-spacing:.1em;color:#F6F7FB;text-transform:uppercase;">Contacto</div>
+      <div style="display:flex;flex-direction:column;gap:11px;margin-top:14px;">
+        <a href="https://wa.me/5491168468563?text=%C2%A1Hola%20La%20Chispa%20Gamer%21%20%F0%9F%91%8B%20Quiero%20reservar%20un%20turno%20para%20jugar.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;color:#9AA0AE;text-decoration:none;font-size:14.5px;font-weight:600;transition:color .2s;" style-hover="color:#25D366;"><svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor"><path d="M16.003 0C7.18 0 .004 7.176.004 16c0 2.82.737 5.585 2.137 8.02L0 32l8.18-2.14A15.94 15.94 0 0 0 16 32C24.82 32 32 24.824 32 16S24.82 0 16.003 0zm0 29.33c-2.5 0-4.95-.67-7.09-1.94l-.51-.3-4.85 1.27 1.29-4.73-.33-.53A13.27 13.27 0 0 1 2.67 16c0-7.35 5.98-13.33 13.34-13.33 3.56 0 6.9 1.39 9.42 3.91a13.23 13.23 0 0 1 3.9 9.42c0 7.36-5.98 13.33-13.33 13.33z"></path></svg>WhatsApp</a>
+        <a href="https://instagram.com/lachispagamer1.8" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;color:#9AA0AE;text-decoration:none;font-size:14.5px;font-weight:600;transition:color .2s;" style-hover="color:#FF2D8E;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg>@lachispagamer1.8</a>
+      </div>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,.06);">
+    <div class="lcg-container" style="max-width:1280px;margin:0 auto;padding:18px 40px;font-size:13px;color:#6c7280;">© 2026 La Chispa Gamer 1.8 · Berazategui Centro · Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<!-- ================= FLOATING WHATSAPP ================= -->
+<a href="#reserva" aria-label="Reservar ahora" class="lcg-float" style="position:fixed;right:26px;bottom:26px;z-index:120;display:inline-flex;align-items:center;gap:11px;background:linear-gradient(135deg,#FF016D,#FF5BA6);color:#fff;font-weight:800;font-size:16px;text-decoration:none;padding:15px 22px 15px 18px;border-radius:999px;animation:lcgPulse 2.6s ease-in-out infinite;transition:transform .18s;" style-hover="transform:scale(1.05);">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 2 4 13.2h6.2L9 22l9.8-11.6H12L13.5 2Z" fill="currentColor" stroke="none"></path></svg>
+  Reservar ahora
+</a>
+
+</div>
+
+
+
+<script>
+(function(){
+  'use strict';
+  // ----- reveal on scroll -----
+  function reveal(){
+    var vh = window.innerHeight || 800;
+    document.querySelectorAll('[data-reveal]:not(.in)').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < vh * 0.92 && r.bottom > 0) el.classList.add('in');
+    });
+  }
+  var onScroll = function(){ requestAnimationFrame(reveal); };
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll, { passive:true });
+  document.addEventListener('DOMContentLoaded', function(){ reveal(); setTimeout(reveal, 120); });
+  reveal(); setTimeout(reveal, 120);
+
+  // ----- mobile menu -----
+  var burger = document.querySelector('.lcg-burger');
+  var menu = document.querySelector('.lcg-mobilemenu');
+  function setMenu(open){
+    if (!menu || !burger) return;
+    menu.hidden = !open;
+    menu.dataset.open = open ? '1' : '0';
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    var io = burger.querySelector('.lcg-burger-open'), ic = burger.querySelector('.lcg-burger-close');
+    if (io) io.style.display = open ? 'none' : '';
+    if (ic) ic.style.display = open ? '' : 'none';
+  }
+  if (burger && menu){
+    burger.addEventListener('click', function(){ setMenu(menu.hidden); });
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ setMenu(false); });
+    });
+    document.addEventListener('click', function(e){
+      if (!menu.hidden && !menu.contains(e.target) && !burger.contains(e.target)) setMenu(false);
+    });
+  }
+
+  // ----- FAQ accordion -----
+  var items = document.querySelectorAll('.lcg-faq-item');
+  items.forEach(function(item){
+    var btn = item.querySelector('.lcg-faq-btn');
+    btn.addEventListener('click', function(){
+      var wasOpen = btn.getAttribute('aria-expanded') === 'true';
+      items.forEach(function(it){
+        var b = it.querySelector('.lcg-faq-btn'), a = it.querySelector('.lcg-faq-a'), c = it.querySelector('.lcg-faq-chev');
+        var open = (it === item) && !wasOpen;
+        b.setAttribute('aria-expanded', open ? 'true' : 'false');
+        a.hidden = !open;
+        c.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    });
+  });
+
+  // ----- WhatsApp reservation form -----
+  var PHONE = '5491168468563';
+  // Supabase (claves públicas) para guardar la consulta de la web en Clientes (embudo).
+  var SUPA_URL = 'https://tevmrdehpijnprjazuyc.supabase.co';
+  var SUPA_KEY = 'sb_publishable_SHzUJI7ZI6EZsBw9v8eQPA_mx2SJcAu';
+  // Tracking para el embudo del dashboard: visita + clics a WhatsApp.
+  function trackEvent(tipo){
+    try {
+      fetch(SUPA_URL + '/rest/v1/web_events', {
+        method: 'POST',
+        headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ tipo: tipo })
+      }).catch(function(){});
+    } catch(e){}
+  }
+  trackEvent('visita');
+  document.addEventListener('click', function(e){
+    var a = (e.target && e.target.closest) ? e.target.closest('a[href*="wa.me"]') : null;
+    if (a) trackEvent('clic_whatsapp');
+  });
+  var submit = document.getElementById('lcg-f-submit');
+  function val(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function hoyISO(){ var t=new Date(); return t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2); }
+  function fmtDia(d){
+    if(!d) return '';
+    var p = d.split('-');
+    if (p.length !== 3) return d;
+    if (d < hoyISO()) return ''; // fecha pasada -> se ignora
+    var dias = ['domingo','lunes','martes','mi\u00e9rcoles','jueves','viernes','s\u00e1bado'];
+    var dt = new Date(+p[0], +p[1]-1, +p[2]);
+    return dias[dt.getDay()] + ' ' + (+p[2]) + '/' + (+p[1]) + '/' + p[0];
+  }
+  function buildHref(){
+    var exp = val('lcg-f-exp') || '[PS5 / VR / PoolF\u00fatbol / cumplea\u00f1os]';
+    var dia = fmtDia(val('lcg-f-dia')) || '[d\u00eda]';
+    var hora = val('lcg-f-horario') || '[hora]';
+    var persN = parseInt(val('lcg-f-personas'), 10);
+    var pers = (isNaN(persN) || persN < 1) ? '[cantidad]' : String(persN);
+    var nombre = val('lcg-f-nombre');
+    var codigo = val('lcg-f-codigo').toUpperCase();
+    var txt = '\u00a1Hola La Chispa Gamer! \ud83d\udc4b Quiero reservar ' + exp + ' para el ' + dia + ' a las ' + hora +
+      ', para ' + pers + ' personas. \u00bfTienen disponibilidad?' + (nombre ? (' Soy ' + nombre + '.') : '') +
+      (codigo ? (' \ud83c\udf9f\ufe0f Vengo con el c\u00f3digo de referido: ' + codigo + '.') : '');
+    return 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(txt);
+  }
+  var diaEl = document.getElementById('lcg-f-dia');
+  if (diaEl) diaEl.min = hoyISO(); // no permite elegir fechas pasadas
+  function guardarLead(){
+    try {
+      var persN = parseInt(val('lcg-f-personas'), 10);
+      fetch(SUPA_URL + '/rest/v1/web_leads', {
+        method: 'POST',
+        headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({
+          nombre: val('lcg-f-nombre') || null,
+          telefono: val('lcg-f-tel') || null,
+          experiencia: val('lcg-f-exp') || null,
+          dia: val('lcg-f-dia') || null,
+          hora: val('lcg-f-horario') || null,
+          personas: isNaN(persN) ? null : persN,
+          codigo_referido: val('lcg-f-codigo').toUpperCase() || null
+        })
+      }).catch(function(){});
+    } catch(e){}
+  }
+  if (submit){
+    var sync = function(){ submit.href = buildHref(); };
+    ['lcg-f-nombre','lcg-f-dia','lcg-f-horario','lcg-f-exp','lcg-f-personas','lcg-f-codigo'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el){ el.addEventListener('input', sync); el.addEventListener('change', sync); }
+    });
+    sync();
+    submit.addEventListener('click', guardarLead); // guarda la consulta en Clientes (embudo)
+  }
+
+  // Mostrar el CTA de "lista de invitados" solo cuando la experiencia es Cumpleaños.
+  var expEl = document.getElementById('lcg-f-exp');
+  var cta = document.getElementById('lcg-invitados-cta');
+  function toggleCumple(){ if(cta && expEl){ cta.style.display = /cumple/i.test(expEl.value) ? 'block' : 'none'; } }
+  if (expEl){ expEl.addEventListener('change', toggleCumple); expEl.addEventListener('input', toggleCumple); }
+  toggleCumple();
+})();
+</script>
+<script>
+/* Fecha mínima = hoy: no se pueden elegir fechas pasadas en ningún campo de fecha. */
+(function () {
+  function hoy() {
+    var d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+  }
+  function aplicar() {
+    document.querySelectorAll('input[type="date"]').forEach(function (i) { i.min = hoy(); });
+  }
+  document.addEventListener('DOMContentLoaded', aplicar);
+  setTimeout(aplicar, 400); setTimeout(aplicar, 1200);
+  document.addEventListener('focusin', function (e) {
+    if (e.target && e.target.matches && e.target.matches('input[type="date"]')) e.target.min = hoy();
+  });
+})();
+</script>
+</body>
+</html>

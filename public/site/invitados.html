@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista de invitados · La Chispa Gamer</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  :root{ --mag:#FF2D8E; --cyan:#19D3FF; --green:#9CFF2E; --bg:#0a0b10; --card:rgba(255,255,255,.04); --bord:rgba(255,255,255,.12); --txt:#F6F7FB; --mut:#9AA0AE; }
+  *{ box-sizing:border-box; }
+  html{ background:var(--bg); }
+  body{ margin:0; min-height:100dvh; color:var(--txt); font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;
+    display:flex; flex-direction:column; justify-content:center;
+    background:radial-gradient(900px 500px at 10% -10%, rgba(255,45,142,.10), transparent), radial-gradient(800px 460px at 100% 0%, rgba(25,211,255,.10), transparent), var(--bg);
+    background-attachment:fixed; background-repeat:no-repeat; background-size:cover; }
+  .wrap{ width:100%; max-width:900px; margin:0 auto; padding:40px 18px; }
+  .brand{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .brand img{ height:38px; }
+  .brand b{ font-weight:900; letter-spacing:.04em; }
+  h1{ font-size:30px; margin:14px 0 4px; }
+  .sub{ color:var(--mut); font-size:15px; margin:0 0 22px; line-height:1.5; }
+  .panel{ background:var(--card); border:1px solid var(--bord); border-radius:20px; padding:22px; margin-bottom:18px; backdrop-filter:blur(14px); box-shadow:0 20px 50px rgba(0,0,0,.4); }
+  .panel h2{ font-size:17px; margin:0 0 14px; }
+  label{ display:block; margin-bottom:12px; }
+  label span{ display:block; font-size:13px; font-weight:600; color:#C0C5D0; margin-bottom:6px; }
+  input, textarea{ width:100%; background:rgba(10,11,16,.6); border:1px solid var(--bord); border-radius:12px; padding:12px 14px; color:var(--txt); font-size:15px; color-scheme:dark; font-family:inherit; }
+  textarea{ resize:vertical; min-height:56px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:640px){ .grid2{ grid-template-columns:1fr; } }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; cursor:pointer; font-weight:800; font-size:15px; padding:13px 20px; border-radius:13px; color:#fff; }
+  .btn-mag{ background:linear-gradient(135deg,#FF2D8E,#FF5BA6); box-shadow:0 12px 30px rgba(255,45,142,.35); }
+  .btn-cyan{ background:linear-gradient(135deg,#19D3FF,#59E0FF); color:#062b34; box-shadow:0 12px 30px rgba(25,211,255,.3); }
+  .btn-ghost{ background:rgba(255,255,255,.06); border:1px solid var(--bord); color:var(--txt); }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .row-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:14px; }
+  th, td{ text-align:left; padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.08); }
+  th{ color:var(--mut); font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+  .del{ background:none; border:0; color:var(--mag); cursor:pointer; font-size:16px; }
+  .empty{ color:var(--mut); font-size:14px; padding:14px 4px; }
+  .msg{ margin-top:12px; padding:11px 14px; border-radius:11px; font-size:14px; }
+  .msg.ok{ background:rgba(156,255,46,.12); color:#B6FF6A; border:1px solid rgba(156,255,46,.3); }
+  .msg.err{ background:rgba(255,45,142,.12); color:#FF7DB4; border:1px solid rgba(255,45,142,.3); }
+  .confirm{ display:flex; gap:10px; align-items:flex-start; margin-top:8px; font-size:14px; color:#C0C5D0; }
+  .confirm input{ width:auto; margin-top:3px; }
+  .count{ color:var(--cyan); font-weight:800; }
+
+  /* ===== Tarjetas de invitación ===== */
+  .cards{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+  @media (max-width:640px){ .cards{ grid-template-columns:1fr; } }
+  .invite{ position:relative; overflow:hidden; border-radius:18px; padding:22px 20px; color:#fff;
+    background:linear-gradient(150deg,#170a1e 0%, #0a0b10 55%, #06131a 100%); border:1px solid rgba(255,255,255,.14); }
+  .invite::before{ content:""; position:absolute; inset:0; background:radial-gradient(300px 160px at 90% 0%, rgba(25,211,255,.22), transparent), radial-gradient(280px 150px at 0% 100%, rgba(255,45,142,.22), transparent); }
+  .invite > *{ position:relative; }
+  .invite .kicker{ font-size:11px; font-weight:800; letter-spacing:.2em; color:var(--green); text-transform:uppercase; }
+  .invite .big{ font-size:26px; font-weight:900; margin:6px 0 2px; line-height:1.1; }
+  .invite .for{ font-size:14px; color:#D8DCE6; }
+  .invite .detail{ margin:10px 0 0; font-size:13.5px; color:#C0C5D0; font-style:italic; }
+  .invite .meta{ margin-top:14px; font-size:12.5px; color:#9AA0AE; line-height:1.5; }
+  .invite .rayo{ position:absolute; top:16px; right:16px; color:var(--mag); }
+  .invite .strip{ margin-top:14px; height:4px; border-radius:99px; background:linear-gradient(90deg,var(--mag),var(--cyan),var(--green)); }
+
+  @media print{
+    body{ background:#fff; }
+    .no-print{ display:none !important; }
+    .wrap{ max-width:100%; padding:0; }
+    .cards{ grid-template-columns:1fr 1fr; gap:10px; }
+    .invite{ break-inside:avoid; border:1px solid #ccc; color:#111; background:#fff; }
+    .invite::before{ display:none; }
+    .invite .kicker{ color:#0a8a3a; } .invite .big{ color:#111; } .invite .for,.invite .detail,.invite .meta{ color:#333; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand no-print">
+    <img src="/site/footer-logo.png" alt="La Chispa Gamer"><b>LA CHISPA GAMER <span style="color:var(--green)">1.8</span></b>
+  </div>
+  <h1 class="no-print">🎂 Lista de invitados</h1>
+  <p class="sub no-print">Cargá a cada invitado del cumple. Con estos datos generamos las <b>tarjetitas de invitación</b> (mismo diseño, solo cambia el nombre) y coordinamos todo. Cada niño debe tener un <b>adulto responsable con teléfono</b>.</p>
+
+  <!-- Datos del cumple -->
+  <div class="panel no-print">
+    <h2>Datos del cumpleaños</h2>
+    <div class="grid2">
+      <label><span>Nombre del cumpleañero/a *</span><input id="c-nombre" placeholder="Ej: Mateo"></label>
+      <label><span>Tu WhatsApp *</span><input id="c-tel" placeholder="Ej: 11 5555 5555"></label>
+      <label><span>Fecha del cumple</span><input id="c-fecha" type="date"></label>
+    </div>
+  </div>
+
+  <!-- Agregar invitado -->
+  <div class="panel no-print">
+    <h2>Agregar invitado</h2>
+    <div class="grid2">
+      <label><span>Nombre del niño/a invitado *</span><input id="g-nino" placeholder="Ej: Lucía"></label>
+      <label><span>Detalle para la tarjeta</span><input id="g-detalle" placeholder="Ej: ¡Te esperamos a jugar!"></label>
+      <label><span>Adulto responsable *</span><input id="g-adulto" placeholder="Nombre del adulto"></label>
+      <label><span>Teléfono del adulto *</span><input id="g-adtel" placeholder="Ej: 11 4444 4444"></label>
+    </div>
+    <div class="row-actions">
+      <button type="button" class="btn btn-cyan" id="add">＋ Agregar invitado</button>
+    </div>
+    <div id="add-msg"></div>
+  </div>
+
+  <!-- Lista -->
+  <div class="panel no-print">
+    <h2>Invitados cargados · <span class="count" id="count">0</span></h2>
+    <div id="list-empty" class="empty">Todavía no agregaste invitados.</div>
+    <table id="list-table" style="display:none">
+      <thead><tr><th>Niño/a</th><th>Adulto responsable</th><th>Teléfono</th><th></th></tr></thead>
+      <tbody id="list-body"></tbody>
+    </table>
+
+    <label class="confirm" id="confirm-wrap" style="display:none">
+      <input type="checkbox" id="confirm-chk">
+      <span>Confirmo que los datos de contacto de cada adulto responsable son correctos y autorizo a La Chispa Gamer a usarlos para coordinar el evento.</span>
+    </label>
+
+    <div class="row-actions">
+      <button type="button" class="btn btn-mag" id="save" disabled>✅ Guardar lista</button>
+      <button type="button" class="btn btn-ghost" id="print" disabled>🖨️ Generar / imprimir tarjetas</button>
+    </div>
+    <div id="save-msg"></div>
+  </div>
+
+  <!-- Tarjetas -->
+  <div id="cards-wrap" style="display:none">
+    <h2 class="no-print" style="font-size:17px;margin:24px 0 10px;">Tarjetas de invitación</h2>
+    <p class="sub no-print">Se imprime una por invitado. Usá <b>Imprimir</b> del navegador o el botón de arriba (Ctrl+P).</p>
+    <div class="cards" id="cards"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SUPA_URL = 'https://tevmrdehpijnprjazuyc.supabase.co';
+  var SUPA_KEY = 'sb_publishable_SHzUJI7ZI6EZsBw9v8eQPA_mx2SJcAu';
+  var guests = [];
+
+  function $(id){ return document.getElementById(id); }
+  function v(id){ var e=$(id); return e ? e.value.trim() : ''; }
+  function esc(s){ return String(s||'').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function fmtFecha(d){ if(!d) return ''; var p=d.split('-'); if(p.length!==3) return d; return (+p[2])+'/'+(+p[1])+'/'+p[0]; }
+  function msg(id, t, txt){ $(id).innerHTML = txt ? '<div class="msg '+t+'">'+txt+'</div>' : ''; }
+
+  var fechaEl = $('c-fecha');
+  if (fechaEl){ var t=new Date(); fechaEl.min = t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2); }
+
+  function render(){
+    $('count').textContent = guests.length;
+    var has = guests.length > 0;
+    $('list-empty').style.display = has ? 'none' : '';
+    $('list-table').style.display = has ? '' : 'none';
+    $('confirm-wrap').style.display = has ? '' : 'none';
+    $('print').disabled = !has;
+    var body = $('list-body'); body.innerHTML = '';
+    guests.forEach(function(g, i){
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>'+esc(g.nino_nombre)+'</td><td>'+esc(g.adulto_nombre)+'</td><td>'+esc(g.adulto_telefono)+'</td>'+
+        '<td style="text-align:right"><button class="del" data-i="'+i+'" title="Quitar">✕</button></td>';
+      body.appendChild(tr);
+    });
+    body.querySelectorAll('.del').forEach(function(b){
+      b.addEventListener('click', function(){ guests.splice(+b.dataset.i,1); render(); syncSave(); });
+    });
+  }
+
+  function syncSave(){
+    var ok = guests.length>0 && $('confirm-chk').checked;
+    $('save').disabled = !ok;
+  }
+
+  $('add').addEventListener('click', function(){
+    var nino=v('g-nino'), adulto=v('g-adulto'), adtel=v('g-adtel');
+    if(!nino || !adulto || !adtel){ msg('add-msg','err','El niño, el adulto responsable y su teléfono son obligatorios.'); return; }
+    guests.push({ nino_nombre:nino, nino_detalle:v('g-detalle')||null, adulto_nombre:adulto, adulto_telefono:adtel });
+    $('g-nino').value=''; $('g-detalle').value=''; $('g-adulto').value=''; $('g-adtel').value='';
+    msg('add-msg','ok','Invitado agregado. Podés seguir cargando.');
+    $('g-nino').focus(); render(); syncSave();
+  });
+
+  $('confirm-chk').addEventListener('change', syncSave);
+
+  $('save').addEventListener('click', function(){
+    if(!v('c-nombre') || !v('c-tel')){ msg('save-msg','err','Completá el nombre del cumpleañero y tu WhatsApp arriba.'); return; }
+    if(!guests.length){ return; }
+    $('save').disabled = true;
+    var payload = guests.map(function(g){
+      return { cumple_nombre:v('c-nombre'), cumple_telefono:v('c-tel'), cumple_fecha:v('c-fecha')||null,
+        nino_nombre:g.nino_nombre, nino_detalle:g.nino_detalle, adulto_nombre:g.adulto_nombre, adulto_telefono:g.adulto_telefono };
+    });
+    fetch(SUPA_URL + '/rest/v1/birthday_guests', {
+      method:'POST',
+      headers:{ 'apikey':SUPA_KEY, 'Authorization':'Bearer '+SUPA_KEY, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+      body: JSON.stringify(payload)
+    }).then(function(r){
+      if(r.ok){ msg('save-msg','ok','¡Listo! Guardamos '+guests.length+' invitado(s). Ya podés generar las tarjetas 👇'); buildCards(); }
+      else { r.text().then(function(t){ msg('save-msg','err','No se pudo guardar: '+(t||r.status)); }); $('save').disabled=false; }
+    }).catch(function(){ msg('save-msg','err','Sin conexión. Intentá de nuevo.'); $('save').disabled=false; });
+  });
+
+  function buildCards(){
+    var fest = esc(v('c-nombre')||'nuestro cumple');
+    var fecha = fmtFecha(v('c-fecha'));
+    var rayo = '<svg class="rayo" viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M13.5 2 4 13.2h6.2L9 22l9.8-11.6H12L13.5 2Z"/></svg>';
+    var html = guests.map(function(g){
+      return '<div class="invite">'+rayo+
+        '<div class="kicker">🎉 ¡Estás invitado!</div>'+
+        '<div class="big">'+esc(g.nino_nombre)+'</div>'+
+        '<div class="for">al cumple de <b>'+fest+'</b></div>'+
+        (g.nino_detalle ? '<div class="detail">“'+esc(g.nino_detalle)+'”</div>' : '')+
+        '<div class="meta">'+(fecha?('📅 '+fecha+'<br>'):'')+'📍 La Chispa Gamer · Av. 14 N°4143, Berazategui</div>'+
+        '<div class="strip"></div>'+
+      '</div>';
+    }).join('');
+    $('cards').innerHTML = html;
+    $('cards-wrap').style.display = '';
+    $('print').disabled = false;
+    $('cards-wrap').scrollIntoView({ behavior:'smooth' });
+  }
+
+  // Permitir generar tarjetas aunque no se haya guardado aún (preview local)
+  $('print').addEventListener('click', function(){
+    if(!$('cards').innerHTML){ buildCards(); setTimeout(function(){ window.print(); }, 300); }
+    else { window.print(); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
