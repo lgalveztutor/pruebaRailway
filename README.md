@@ -3,6 +3,23 @@
 Un solo proyecto Next.js: la web pública en `/` y el panel de administración en `/admin`.
 Un solo hosting (Vercel) y una sola base de datos (Supabase). Costo mínimo.
 
+## 👀 Para el revisor — qué quiero que mires
+
+Gracias por revisar. Es un sistema de gestión para un salón gamer (web pública + panel
+`/admin`) sobre **Next.js + Supabase**. Me interesa tu punto de vista, sobre todo en:
+
+1. **Seguridad de Supabase / RLS.** Todas las tablas usan Row Level Security (ver
+   `db/paso-*.sql`). ¿Están bien las políticas? ¿Se puede filtrar o robar datos con la
+   *anon key* pública? **Esto es lo más importante.**
+2. **Errores / bugs** en formularios y cálculos (caja, ventas, descuentos por referido,
+   finanzas del mes, stock).
+3. **Rendimiento y buenas prácticas** de Next.js (server vs. client components, queries).
+4. **Opinión general:** qué mejorarías o harías distinto.
+
+> **Importante:** por ahora es **solo revisión**. No hace falta que modifiques el código.
+> Dejá tus comentarios y sugerencias (Issues o comentarios en el código) y los vemos
+> juntos antes de aplicar nada.
+
 ## Cómo correrlo (local)
 
 ```bash
@@ -31,12 +48,21 @@ lachispagamer/
 │           ├── dashboard/      # KPIs
 │           ├── reservas/  caja/  ventas/  gastos/  clientes/
 │           └── stock/  calendario/  reportes/
-├── components/                 # Sidebar, placeholders
-├── lib/supabase/               # clientes client/server + helpers
+├── components/                 # formularios, charts, sidebar
+├── lib/                        # supabase client/server, format, categorías, finanzas, descuento
+├── db/                         # migraciones SQL (paso-3 … paso-14) que se corren en Supabase
 ├── middleware.js               # protege /admin (redirige a /admin/login sin sesión)
-├── public/site/                # web pública estática actual (se sirve en "/")
+├── public/site/                # web pública estática (home.html + invitados.html)
 └── next.config.js              # rewrite "/" -> /site/home.html
 ```
+
+## Base de datos (Supabase)
+
+El esquema y las políticas viven en `db/paso-*.sql`. Se corren **en orden** desde el SQL
+Editor de Supabase (Postgres). Cada archivo agrega una parte: tablas, RLS, roles, sistema
+de referidos/descuentos, listas de invitados, retención, etc. La seguridad se apoya en
+**Row Level Security**: la web pública usa la *anon key* (solo puede insertar leads,
+eventos e invitados), y el panel usa sesión autenticada.
 
 ## La web pública
 
