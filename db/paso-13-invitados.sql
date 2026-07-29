@@ -35,11 +35,11 @@ create policy "invitados_insert_publico" on birthday_guests
 
 drop policy if exists "invitados_select_staff" on birthday_guests;
 create policy "invitados_select_staff" on birthday_guests
-  for select to authenticated using (true);
+  for select to authenticated using (public.mi_rol() in ('dueno', 'gerente', 'contador'));
 
 drop policy if exists "invitados_update_staff" on birthday_guests;
 create policy "invitados_update_staff" on birthday_guests
-  for update to authenticated using (true) with check (true);
+  for update to authenticated using (public.mi_rol() in ('dueno', 'gerente')) with check (public.mi_rol() in ('dueno', 'gerente'));
 
 grant insert on birthday_guests to anon;
 grant select, update on birthday_guests to authenticated;

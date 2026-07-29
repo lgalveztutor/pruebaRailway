@@ -18,8 +18,7 @@ export default async function ClientesPage() {
     const supabase = createClient();
 
     // Retención: purga contactos de invitados con más de 31 días (no satura la base).
-    const corte = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000).toISOString();
-    await supabase.from('birthday_guests').delete().lt('created_at', corte);
+    await supabase.rpc('purgar_invitados_viejos');
 
     const [c, l, g] = await Promise.all([
       supabase.from('clients')

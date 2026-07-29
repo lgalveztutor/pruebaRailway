@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { hoyISO } from '@/lib/format';
 
 export default function ConsolaSessionForm({ consoles }) {
   const router = useRouter();
@@ -19,33 +20,16 @@ export default function ConsolaSessionForm({ consoles }) {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     const precio = f.precio ? Number(f.precio) : 0;
-    const { error } = await supabase.from('console_sessions').insert({
-      console_id: Number(f.console_id),
-      juego: f.juego || null,
-      inicio: f.inicio || null,
-      fin: f.fin || null,
-      precio,
-      estado: f.fin ? 'cerrada' : 'abierta',
+    const { error } = await supabase.rpc('registrar_sesion_consola', {
+      p_console_id: Number(f.console_id),
+      p_juego: f.juego || null,
+      p_inicio: f.inicio || null,
+      p_fin: f.fin || null,
+      p_precio: precio,
+      p_empleado_id: user?.id ?? null,
+      p_fecha: hoyISO(),
     });
     if (error) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + error.message }); return; }
-
-    // Marca la consola como en uso (sesión abierta) o disponible (cerrada).
-    await supabase.from('consoles').update({ estado: f.fin ? 'disponible' : 'en_uso' }).eq('id', f.console_id);
-
-    // Vinculación con Ventas: si tiene precio, genera la venta (servicio).
-    if (precio > 0) {
-      const consola = consoles.find((c) => String(c.id) === String(f.console_id));
-      const { data: sale } = await supabase.from('sales').insert({
-        fecha: new Date().toISOString().slice(0, 10), total: precio, medio_pago: 'efectivo', empleado_id: user?.id ?? null,
-      }).select('id').single();
-      if (sale?.id) {
-        await supabase.from('sale_items').insert({
-          sale_id: sale.id, categoria: 'consolas',
-          descripcion: (consola?.nombre || 'Consola') + (f.juego ? ` · ${f.juego}` : ''),
-          cantidad: 1, precio_unit: precio, total: precio,
-        });
-      }
-    }
     setLoading(false);
     setF({ console_id: '', juego: '', inicio: '', fin: '', precio: '' });
     setMsg({ t: 'ok', m: 'Sesión registrada.' });
