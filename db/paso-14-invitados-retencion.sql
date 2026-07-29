@@ -8,7 +8,7 @@
 
 drop policy if exists "invitados_delete_staff" on birthday_guests;
 create policy "invitados_delete_staff" on birthday_guests
-  for delete to authenticated using (true);
+  for delete to authenticated using (public.mi_rol() = 'dueno');
 
 grant delete on birthday_guests to authenticated;
 
@@ -21,6 +21,9 @@ set search_path = public
 as $$
 declare n integer;
 begin
+  if public.mi_rol() not in ('dueno', 'gerente') then
+    raise exception 'No autorizado para purgar invitados viejos';
+  end if;
   delete from birthday_guests where created_at < now() - interval '31 days';
   get diagnostics n = row_count;
   return n;

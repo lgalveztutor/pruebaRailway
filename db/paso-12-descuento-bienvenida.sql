@@ -47,8 +47,8 @@ begin
     v_pct := coalesce(c.descuento_pct, 0);
   end if;
   return jsonb_build_object(
-    'encontrado', true, 'nombre', c.nombre, 'codigo', c.codigo_referido,
-    'pct', v_pct, 'visitas', coalesce(c.visitas, 0)
+    'encontrado', true, 'nombre', c.nombre,
+    'pct', v_pct
   );
 end;
 $$;
@@ -64,30 +64,36 @@ as $$
 declare
   c clients%rowtype;
   v_pct numeric := 0;
+  v_visitas integer := 0;
 begin
   if p_telefono is null or btrim(p_telefono) = '' then
     return jsonb_build_object('encontrado', false, 'pct', 0);
   end if;
-  select * into c from clients where telefono = btrim(p_telefono) order by created_at asc limit 1;
+  select * into c from clients where telefono = btrim(p_telefono) order by created_at asc limit 1 for update;
   if not found then
     return jsonb_build_object('encontrado', false, 'pct', 0);
   end if;
 
-  -- fidelidad: siempre suma una visita
-  update clients set visitas = coalesce(visitas, 0) + 1 where id = c.id;
+  -- fidelidad + candado de bienvenida: una sola escritura sobre la misma fila.
+  update clients
+  set visitas = coalesce(visitas, 0) + 1,
+      descuento_bienvenida_usado = case
+        when c.codigo_referido is not null and coalesce(c.descuento_bienvenida_usado, false) = false then true
+        else descuento_bienvenida_usado
+      end
+  where id = c.id
+  returning visitas into v_visitas;
 
-  -- descuento de bienvenida: una sola vez
   if c.codigo_referido is not null and coalesce(c.descuento_bienvenida_usado, false) = false then
-    update clients set descuento_bienvenida_usado = true where id = c.id;
     v_pct := coalesce(c.descuento_pct, 0);
   end if;
 
   return jsonb_build_object(
     'encontrado', true, 'client_id', c.id, 'nombre', c.nombre,
-    'codigo', c.codigo_referido, 'pct', v_pct, 'visitas', coalesce(c.visitas, 0) + 1
+    'pct', v_pct, 'visitas', v_visitas
   );
 end;
 $$;
 
-grant execute on function preview_descuento(text) to authenticated, anon;
+grant execute on function preview_descuento(text) to authenticated;
 grant execute on function registrar_servicio_cliente(text) to authenticated;

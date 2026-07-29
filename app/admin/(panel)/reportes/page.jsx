@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
-import { money, hoyISO, fechaCorta, PRECIO_HORA } from '@/lib/format';
+import { money, hoyISO, fechaCorta, PRECIO_HORA, offsetISO } from '@/lib/format';
 import { tipoVenta, LABEL_CATEGORIA } from '@/lib/categorias';
 import { clasificacionDe, depreciacionMensual } from '@/lib/finanzas';
 import ExportCSV from '@/components/ExportCSV';
@@ -11,9 +11,7 @@ function rango(p) {
   const hoy = hoyISO();
   if (p === 'hoy') return { start: hoy, end: hoy, label: 'Hoy' };
   if (p === 'semana') {
-    const d = new Date();
-    d.setDate(d.getDate() - 6);
-    return { start: d.toISOString().slice(0, 10), end: hoy, label: 'Últimos 7 días' };
+    return { start: offsetISO(-6), end: hoy, label: 'Últimos 7 días' };
   }
   return { start: hoy.slice(0, 8) + '01', end: hoy, label: 'Este mes' };
 }

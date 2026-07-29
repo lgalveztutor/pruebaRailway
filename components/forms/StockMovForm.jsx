@@ -23,32 +23,18 @@ export default function StockMovForm({ products }) {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Leer stock actual
-    const { data: prod, error: e0 } = await supabase
-      .from('products').select('stock_actual').eq('id', f.product_id).single();
-    if (e0) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + e0.message }); return; }
-
-    let nuevo;
-    if (f.tipo === 'ingreso') nuevo = Number(prod.stock_actual) + cant;
-    else if (f.tipo === 'egreso') nuevo = Number(prod.stock_actual) - cant;
-    else nuevo = cant; // ajuste = deja el stock en este valor exacto
-
-    // Actualizar producto + registrar movimiento
-    const { error: e1 } = await supabase.from('products').update({ stock_actual: nuevo }).eq('id', f.product_id);
-    if (e1) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + e1.message }); return; }
-
-    const { error: e2 } = await supabase.from('stock_movements').insert({
-      product_id: Number(f.product_id),
-      tipo: f.tipo,
-      cantidad: cant,
-      motivo: f.motivo || null,
-      usuario_id: user?.id ?? null,
+    const { data, error } = await supabase.rpc('registrar_movimiento_stock', {
+      p_product_id: Number(f.product_id),
+      p_tipo: f.tipo,
+      p_cantidad: cant,
+      p_motivo: f.motivo || null,
+      p_usuario_id: user?.id ?? null,
     });
     setLoading(false);
-    if (e2) { setMsg({ t: 'err', m: 'Stock actualizado, pero falló el registro: ' + e2.message }); return; }
+    if (error) { setMsg({ t: 'err', m: 'Error: ' + error.message }); return; }
 
     setF({ ...f, cantidad: '', motivo: '' });
-    setMsg({ t: 'ok', m: 'Stock actualizado.' });
+    setMsg({ t: 'ok', m: `Stock actualizado. Nuevo stock: ${Number(data?.stock_actual ?? 0)}` });
     router.refresh();
   }
 

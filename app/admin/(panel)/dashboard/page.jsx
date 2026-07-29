@@ -1,5 +1,5 @@
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
-import { money, hoyISO } from '@/lib/format';
+import { money, hoyISO, offsetISO } from '@/lib/format';
 import { tipoVenta } from '@/lib/categorias';
 import FunnelConversion from '@/components/charts/FunnelConversion';
 import DonutIngresos from '@/components/charts/DonutIngresos';
@@ -9,9 +9,7 @@ import TopProductos from '@/components/charts/TopProductos';
 export const dynamic = 'force-dynamic';
 
 function ayerISO() {
-  const d = new Date();
-  d.setDate(d.getDate() - 1);
-  return d.toISOString().slice(0, 10);
+  return offsetISO(-1);
 }
 
 async function getKpis(supabase, hoy) {

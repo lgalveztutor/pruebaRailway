@@ -43,35 +43,37 @@ export default function VentaForm({ products = [] }) {
   async function registrar() {
     setMsg(null);
     if (cart.length === 0) { setMsg({ t: 'err', m: 'Agregá al menos un producto.' }); return; }
+
+    const grouped = Object.values(cart.reduce((acc, it) => {
+      const key = String(it.product_id);
+      if (!acc[key]) {
+        acc[key] = { ...it };
+      } else {
+        acc[key].cantidad += it.cantidad;
+        acc[key].total += it.total;
+      }
+      return acc;
+    }, {}));
+
+    for (const it of grouped) {
+      const prod = products.find((p) => String(p.id) === String(it.product_id));
+      if (prod && Number(prod.stock_actual) < Number(it.cantidad)) {
+        setMsg({ t: 'err', m: `Stock insuficiente para ${it.nombre}.` });
+        return;
+      }
+    }
+
     setLoading(true);
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    // 1) Cabecera de venta
-    const { data: sale, error: e1 } = await supabase.from('sales').insert({
-      fecha: hoyISO(), total, medio_pago: medio, empleado_id: user?.id ?? null,
-    }).select('id').single();
-    if (e1) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + e1.message }); return; }
-
-    // 2) Detalle
-    const items = cart.map((it) => ({
-      sale_id: sale.id, categoria: it.categoria, descripcion: it.nombre,
-      cantidad: it.cantidad, precio_unit: it.precio_unit, total: it.total, product_id: it.product_id,
-    }));
-    const { error: e2 } = await supabase.from('sale_items').insert(items);
-    if (e2) { setLoading(false); setMsg({ t: 'err', m: 'Venta creada, falló el detalle: ' + e2.message }); return; }
-
-    // 3) Descuento de stock automático + registro del movimiento
-    const ids = cart.map((i) => i.product_id);
-    const { data: prods } = await supabase.from('products').select('id, stock_actual').in('id', ids);
-    const stockMap = Object.fromEntries((prods || []).map((p) => [p.id, Number(p.stock_actual)]));
-    for (const it of cart) {
-      const nuevo = (stockMap[it.product_id] ?? 0) - it.cantidad;
-      await supabase.from('products').update({ stock_actual: nuevo }).eq('id', it.product_id);
-    }
-    await supabase.from('stock_movements').insert(
-      cart.map((it) => ({ product_id: it.product_id, tipo: 'egreso', cantidad: it.cantidad, motivo: 'venta', usuario_id: user?.id ?? null }))
-    );
+    const { error } = await supabase.rpc('registrar_venta_productos', {
+      p_fecha: hoyISO(),
+      p_medio_pago: medio,
+      p_empleado_id: user?.id ?? null,
+      p_items: grouped,
+    });
+    if (error) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + error.message }); return; }
 
     setLoading(false);
     setCart([]);
@@ -144,7 +146,7 @@ export default function VentaForm({ products = [] }) {
             {MEDIOS.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
         </div>
-        <button className="btn-primary" style={{ width: 'auto', padding: '12px 22px' }} onClick={registrar} disabled={loading}>
+        <button type="button" className="btn-primary" style={{ width: 'auto', padding: '12px 22px' }} onClick={registrar} disabled={loading}>
           {loading ? 'Registrando…' : 'Registrar venta'}
         </button>
       </div>
