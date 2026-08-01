@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { fechaCorta, money } from '@/lib/format';
 import ReservaForm from '@/components/forms/ReservaForm';
 import WalkinForm from '@/components/forms/WalkinForm';

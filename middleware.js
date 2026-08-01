@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifySessionToken } from '@/lib/session';
+import { verifySessionToken } from '@/lib/session-edge';
 
 // Protege TODAS las rutas /admin (excepto /admin/login).
 // Sin sesion valida -> redirige a /admin/login.
@@ -12,7 +12,7 @@ export async function middleware(request) {
   }
 
   const token = request.cookies.get('lcg_session')?.value;
-  const user = verifySessionToken(token);
+  const user = await verifySessionToken(token);
 
   const isLogin = pathname === '/admin/login';
 

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { fechaCorta } from '@/lib/format';
 import ClienteForm from '@/components/forms/ClienteForm';
 import AtenderLead from '@/components/AtenderLead';
