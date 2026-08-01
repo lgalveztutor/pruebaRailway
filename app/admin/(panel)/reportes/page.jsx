@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { money, hoyISO, fechaCorta, PRECIO_HORA, offsetISO } from '@/lib/format';
 import { tipoVenta, LABEL_CATEGORIA } from '@/lib/categorias';
 import { clasificacionDe, depreciacionMensual } from '@/lib/finanzas';

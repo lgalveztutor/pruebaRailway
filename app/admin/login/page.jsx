@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/postgres-client';
 
@@ -11,12 +11,12 @@ const ACCENT_GLOW = 'rgba(255,45,141,0.28)';
 
 // Orden y proporción de las franjas del collage (igual al diseño 1c).
 const STRIPS = [
-  { src: '/login/foto03.jpg', flex: 1 },
-  { src: '/login/foto01.jpg', flex: 1 },
-  { src: '/login/foto06.jpg', flex: 1.2 },
-  { src: '/login/foto02.jpg', flex: 1 },
-  { src: '/login/foto04.jpg', flex: 1 },
-  { src: '/login/foto05.jpg', flex: 1 },
+  { src: '/site/galeria/vr.webp', flex: 1 },
+  { src: '/site/galeria/poolfutbol.webp', flex: 1 },
+  { src: '/site/galeria/sala-principal.webp', flex: 1.2 },
+  { src: '/site/galeria/ps5.webp', flex: 1 },
+  { src: '/site/galeria/sala-principal.webp', flex: 1 },
+  { src: '/site/galeria/cumpleanos.webp', flex: 1 },
 ];
 
 const inputStyle = {
@@ -31,9 +31,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const configured =
     Boolean(process.env.DATABASE_URL);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -130,7 +135,7 @@ export default function LoginPage() {
             style={{ color: '#67e8f9', textDecoration: 'none' }}>¿Olvidaste tu contraseña?</a>
         </div>
 
-        {!configured && (
+        {mounted && !configured && (
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,.5)', textAlign: 'center', margin: 0 }}>
             Modo desarrollo: PostgreSQL aún no configurado.
           </p>

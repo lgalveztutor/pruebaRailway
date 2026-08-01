@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { money } from '@/lib/format';
 import ConsolaForm from '@/components/forms/ConsolaForm';
 import ConsolaSessionForm from '@/components/forms/ConsolaSessionForm';

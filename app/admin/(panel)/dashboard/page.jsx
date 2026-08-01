@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { money, hoyISO, offsetISO } from '@/lib/format';
 import { tipoVenta } from '@/lib/categorias';
 import FunnelConversion from '@/components/charts/FunnelConversion';

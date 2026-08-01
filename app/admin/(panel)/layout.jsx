@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 
 // Shell del panel: sidebar + contenido. Doble barrera de seguridad:
 // el middleware ya protege /admin, y acá volvemos a verificar la sesion en el servidor.

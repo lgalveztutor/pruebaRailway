@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { hoyISO } from '@/lib/format';
 import CalendarDay from '@/components/CalendarDay';
 

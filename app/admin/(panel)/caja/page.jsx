@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { money, hoyISO, fechaCorta } from '@/lib/format';
 import CajaMovForm from '@/components/forms/CajaMovForm';
 import CierreForm from '@/components/forms/CierreForm';

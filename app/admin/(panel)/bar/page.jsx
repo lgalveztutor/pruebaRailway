@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/postgres-client';
+import { createClient } from '@/lib/postgres-client.server';
 import { money, hoyISO } from '@/lib/format';
 import BarForm from '@/components/forms/BarForm';
 
