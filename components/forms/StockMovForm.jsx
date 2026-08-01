@@ -20,10 +20,10 @@ export default function StockMovForm({ products }) {
     if (cant <= 0) { setMsg({ t: 'err', m: 'Cantidad inválida.' }); return; }
 
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
 
-    const { data, error } = await supabase.rpc('registrar_movimiento_stock', {
+    const { data, error } = await client.rpc('registrar_movimiento_stock', {
       p_product_id: Number(f.product_id),
       p_tipo: f.tipo,
       p_cantidad: cant,

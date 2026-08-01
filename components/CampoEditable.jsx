@@ -14,8 +14,8 @@ export default function CampoEditable({ tabla, id, campo, value }) {
   async function guardar() {
     if (String(v) === String(value)) return;
     setSaving(true);
-    const supabase = createClient();
-    const { error } = await supabase.from(tabla).update({ [campo]: Number(v || 0) }).eq('id', id);
+    const client = createClient();
+    const { error } = await client.from(tabla).update({ [campo]: Number(v || 0) }).eq('id', id);
     setSaving(false);
     if (error) { alert('No se pudo guardar: ' + error.message); setV(value ?? ''); return; }
     router.refresh();

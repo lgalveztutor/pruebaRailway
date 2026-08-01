@@ -12,10 +12,10 @@ export default async function ConsolasPage() {
   let consoles = [];
   let sesiones = [];
   let err = null;
-  const supabase = createClient();
+  const client = createClient();
   const [c, s] = await Promise.all([
-    supabase.from('consoles').select('id, nombre, estado').order('nombre', { ascending: true }),
-    supabase.from('console_sessions').select('id, juego, inicio, fin, precio, estado, consoles(nombre)').order('id', { ascending: false }).limit(50),
+    client.from('consoles').select('id, nombre, estado').order('nombre', { ascending: true }),
+    client.from('console_sessions').select('id, juego, inicio, fin, precio, estado, consoles(nombre)').order('id', { ascending: false }).limit(50),
   ]);
   consoles = c.data || [];
   sesiones = s.data || [];

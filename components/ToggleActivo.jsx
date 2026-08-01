@@ -14,8 +14,8 @@ export default function ToggleActivo({ id, activo }) {
     const nuevo = !val;
     setVal(nuevo);
     setSaving(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('products').update({ activo: nuevo }).eq('id', id);
+    const client = createClient();
+    const { error } = await client.from('products').update({ activo: nuevo }).eq('id', id);
     setSaving(false);
     if (error) { alert('No se pudo guardar: ' + error.message); setVal(activo); return; }
     router.refresh();

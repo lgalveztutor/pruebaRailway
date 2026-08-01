@@ -10,9 +10,9 @@ export default function DevolverPulsera({ id }) {
 
   async function devolver() {
     setLoading(true);
-    const supabase = createClient();
+    const client = createClient();
     const horaFin = new Date().toTimeString().slice(0, 8);
-    await supabase.from('walkin_orders').update({ estado: 'devuelta', hora_terminada: horaFin }).eq('id', id);
+    await client.from('walkin_orders').update({ estado: 'devuelta', hora_terminada: horaFin }).eq('id', id);
     setLoading(false);
     router.refresh();
   }

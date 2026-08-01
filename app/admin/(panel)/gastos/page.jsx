@@ -31,7 +31,7 @@ function TablaGastos({ items }) {
 export default async function GastosPage() {
   let rows = [];
   let err = null;
-  const supabase = createClient();
+  const client = createClient();
   const { data, error } = await supabase
     .from('expenses')
     .select('id, fecha, categoria, concepto, monto, medio_pago')

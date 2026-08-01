@@ -32,15 +32,15 @@ export default async function ReservasPage() {
   let walkins = [];
   let err = null;
 
-  const supabase = createClient();
+  const client = createClient();
   const [r, b, w] = await Promise.all([
-    supabase.from('reservations')
+    client.from('reservations')
       .select('id, nombre, telefono, fecha, hora, personas, tipo, sena, total_estimado, estado')
       .order('fecha', { ascending: false }).limit(200),
-    supabase.from('birthday_reservations')
+    client.from('birthday_reservations')
       .select('id, cumpleanero, fecha, horario, cant_chicos, cant_adultos, sena, total, estado')
       .order('fecha', { ascending: false }).limit(200),
-    supabase.from('walkin_orders')
+    client.from('walkin_orders')
       .select('id, fecha, encargado, personas, sector, precio, pago_total, medio_pago, hora_pedida, hora_terminada, estado')
       .order('id', { ascending: false }).limit(200),
   ]);

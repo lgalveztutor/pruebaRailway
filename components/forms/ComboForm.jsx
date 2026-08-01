@@ -16,8 +16,8 @@ export default function ComboForm() {
     setMsg(null);
     if (!f.nombre.trim()) { setMsg({ t: 'err', m: 'Poné un nombre.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('combos').insert({
+    const client = createClient();
+    const { error } = await client.from('combos').insert({
       nombre: f.nombre.trim(),
       color: f.color,
       precio: f.precio ? Number(f.precio) : 0,

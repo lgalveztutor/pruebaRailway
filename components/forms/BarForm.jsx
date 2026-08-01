@@ -42,11 +42,11 @@ export default function BarForm({ products }) {
     setMsg(null);
     if (cart.length === 0) { setMsg({ t: 'err', m: 'Agregá productos.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
 
     // 1) Venta (cabecera)
-    const { data: sale, error: e1 } = await supabase.from('sales').insert({
+    const { data: sale, error: e1 } = await client.from('sales').insert({
       fecha: hoyISO(), total, medio_pago: medio, empleado_id: user?.id ?? null,
     }).select('id').single();
     if (e1) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + e1.message }); return; }
@@ -56,18 +56,18 @@ export default function BarForm({ products }) {
       sale_id: sale.id, categoria: 'bar', descripcion: it.nombre,
       cantidad: it.cantidad, precio_unit: it.precio_unit, total: it.total, product_id: it.product_id,
     }));
-    const { error: e2 } = await supabase.from('sale_items').insert(items);
+    const { error: e2 } = await client.from('sale_items').insert(items);
     if (e2) { setLoading(false); setMsg({ t: 'err', m: 'Venta creada, falló el detalle: ' + e2.message }); return; }
 
     // 3) Descontar stock + registrar movimiento (automático)
     const ids = cart.map((i) => i.product_id);
-    const { data: prods } = await supabase.from('products').select('id, stock_actual').in('id', ids);
+    const { data: prods } = await client.from('products').select('id, stock_actual').in('id', ids);
     const stockMap = Object.fromEntries((prods || []).map((p) => [p.id, Number(p.stock_actual)]));
     for (const it of cart) {
       const nuevo = (stockMap[it.product_id] ?? 0) - it.cantidad;
-      await supabase.from('products').update({ stock_actual: nuevo }).eq('id', it.product_id);
+      await client.from('products').update({ stock_actual: nuevo }).eq('id', it.product_id);
     }
-    await supabase.from('stock_movements').insert(
+    await client.from('stock_movements').insert(
       cart.map((it) => ({ product_id: it.product_id, tipo: 'egreso', cantidad: it.cantidad, motivo: 'venta bar', usuario_id: user?.id ?? null }))
     );
 

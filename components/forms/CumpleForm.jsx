@@ -61,7 +61,7 @@ export default function CumpleForm() {
     if (!f.cumpleanero.trim()) { setMsg({ t: 'err', m: 'Cargá el nombre del cumpleañero.' }); return; }
     if (!f.fecha) { setMsg({ t: 'err', m: 'Cargá la fecha del evento.' }); return; }
     setLoading(true);
-    const supabase = createClient();
+    const client = createClient();
 
     // Descuento de bienvenida automático (una sola vez + suma visita de fidelidad).
     let pctReal = 0;
@@ -72,7 +72,7 @@ export default function CumpleForm() {
     const baseTotal = f.total ? Number(f.total) : 0;
     const totalFinal = pctReal > 0 ? aplicarPct(baseTotal, pctReal) : baseTotal;
 
-    const { error } = await supabase.from('birthday_reservations').insert({
+    const { error } = await client.from('birthday_reservations').insert({
       cumpleanero: f.cumpleanero.trim(),
       edad: f.edad ? Number(f.edad) : null,
       fecha: f.fecha,

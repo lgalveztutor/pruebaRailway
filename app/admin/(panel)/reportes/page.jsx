@@ -36,19 +36,19 @@ export default async function ReportesPage({ searchParams }) {
   let fin = null;
   let err = null;
 
-  const supabase = createClient();
+  const client = createClient();
   const mesInicio = hoyISO().slice(0, 8) + '01';
   const mesYYYYMM = hoyISO().slice(0, 7);
   const [si, g, r, b, prod, gm, cx, sm] = await Promise.all([
-    supabase.from('sale_items').select('descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)').gte('sales.fecha', start).lte('sales.fecha', end),
-    supabase.from('expenses').select('id, fecha, categoria, concepto, monto').gte('fecha', start).lte('fecha', end).order('fecha', { ascending: false }),
-    supabase.from('reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
-    supabase.from('birthday_reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
-    supabase.from('products').select('nombre, stock_actual, stock_min'),
+    client.from('sale_items').select('descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)').gte('sales.fecha', start).lte('sales.fecha', end),
+    client.from('expenses').select('id, fecha, categoria, concepto, monto').gte('fecha', start).lte('fecha', end).order('fecha', { ascending: false }),
+    client.from('reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
+    client.from('birthday_reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
+    client.from('products').select('nombre, stock_actual, stock_min'),
     // Finanzas (siempre del mes en curso):
-    supabase.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').gte('fecha', mesInicio),
-    supabase.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').eq('clasificacion', 'capex'),
-    supabase.from('sale_items').select('categoria, total, sales!inner(fecha)').gte('sales.fecha', mesInicio),
+    client.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').gte('fecha', mesInicio),
+    client.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').eq('clasificacion', 'capex'),
+    client.from('sale_items').select('categoria, total, sales!inner(fecha)').gte('sales.fecha', mesInicio),
   ]);
   items = si.data || [];
   gastos = g.data || [];

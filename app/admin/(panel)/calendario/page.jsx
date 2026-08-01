@@ -28,10 +28,10 @@ export default async function CalendarioPage({ searchParams }) {
   let reservas = [];
   let cumples = [];
   let err = null;
-  const supabase = createClient();
+  const client = createClient();
   const [r, b] = await Promise.all([
-    supabase.from('reservations').select('id, fecha, hora, nombre, tipo').gte('fecha', start).lte('fecha', end),
-    supabase.from('birthday_reservations').select('id, fecha, horario, cumpleanero').gte('fecha', start).lte('fecha', end),
+    client.from('reservations').select('id, fecha, hora, nombre, tipo').gte('fecha', start).lte('fecha', end),
+    client.from('birthday_reservations').select('id, fecha, horario, cumpleanero').gte('fecha', start).lte('fecha', end),
   ]);
   reservas = r.data || [];
   cumples = b.data || [];

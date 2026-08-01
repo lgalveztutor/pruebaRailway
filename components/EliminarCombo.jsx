@@ -11,8 +11,8 @@ export default function EliminarCombo({ id, nombre }) {
   async function eliminar() {
     if (!confirm(`¿Eliminar "${nombre}"?`)) return;
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('combos').delete().eq('id', id);
+    const client = createClient();
+    const { error } = await client.from('combos').delete().eq('id', id);
     setLoading(false);
     if (error) { alert('No se pudo eliminar: ' + error.message); return; }
     router.refresh();

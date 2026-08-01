@@ -25,8 +25,8 @@ export default function Sidebar({ userEmail }) {
 
   async function logout() {
     try {
-      const supabase = createClient();
-      await supabase.auth.signOut();
+      const client = createClient();
+      await client.auth.signOut();
     } catch {
       /* sin sesion activa aun */
     }

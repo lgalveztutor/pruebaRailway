@@ -57,8 +57,8 @@ export default function WalkinForm() {
     setMsg(null);
     if (!f.encargado.trim()) { setMsg({ t: 'err', m: 'Cargá el encargado del grupo.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
 
     // Consumir descuento de bienvenida (marca usado + suma visita de fidelidad).
     let pctReal = 0;
@@ -74,7 +74,7 @@ export default function WalkinForm() {
     const horaFin = f.hora_pedida && f.horas ? sumarHoras(f.hora_pedida, f.horas) : null;
 
     // 1) Orden de llegada
-    const { error } = await supabase.from('walkin_orders').insert({
+    const { error } = await client.from('walkin_orders').insert({
       fecha: hoyISO(),
       encargado: f.encargado.trim(),
       telefono: f.telefono.trim() || null,
@@ -93,11 +93,11 @@ export default function WalkinForm() {
 
     // 2) Venta automática (servicio) para Caja y Reportes
     if (pago > 0) {
-      const { data: sale } = await supabase.from('sales').insert({
+      const { data: sale } = await client.from('sales').insert({
         fecha: hoyISO(), total: pago, descuento: montoDesc, medio_pago: f.medio_pago, empleado_id: user?.id ?? null,
       }).select('id').single();
       if (sale?.id) {
-        await supabase.from('sale_items').insert({
+        await client.from('sale_items').insert({
           sale_id: sale.id, categoria: categoriaDeSector(f.sector),
           descripcion: `${f.sector} · ${f.horas}h · ${f.encargado.trim()}${pctReal > 0 ? ` · -${pctReal}% bienvenida` : ''}`,
           cantidad: 1, precio_unit: pago, total: pago,

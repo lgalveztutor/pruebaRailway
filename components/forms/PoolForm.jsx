@@ -20,10 +20,10 @@ export default function PoolForm() {
     setMsg(null);
     if (!f.fecha) { setMsg({ t: 'err', m: 'Cargá la fecha.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
     const precio = f.precio ? Number(f.precio) : 0;
-    const { error } = await supabase.from('poolfootball_sessions').insert({
+    const { error } = await client.from('poolfootball_sessions').insert({
       fecha: f.fecha,
       inicio: f.inicio || null,
       fin: f.fin || null,
@@ -36,11 +36,11 @@ export default function PoolForm() {
 
     // Vinculación con Ventas: si tiene precio, genera la venta (servicio).
     if (precio > 0) {
-      const { data: sale } = await supabase.from('sales').insert({
+      const { data: sale } = await client.from('sales').insert({
         fecha: f.fecha, total: precio, medio_pago: f.medio_pago, empleado_id: user?.id ?? null,
       }).select('id').single();
       if (sale?.id) {
-        await supabase.from('sale_items').insert({
+        await client.from('sale_items').insert({
           sale_id: sale.id, categoria: 'poolfutbol',
           descripcion: 'PoolFútbol' + (f.jugadores ? ` · ${f.jugadores} jugadores` : ''),
           cantidad: 1, precio_unit: precio, total: precio,

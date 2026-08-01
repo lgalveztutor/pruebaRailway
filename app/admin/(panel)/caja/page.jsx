@@ -11,13 +11,13 @@ export default async function CajaPage() {
   let err = null;
   const hoy = hoyISO();
 
-  const supabase = createClient();
+  const client = createClient();
   const [m, c] = await Promise.all([
-    supabase.from('cash_movements')
+    client.from('cash_movements')
       .select('id, tipo, monto, medio_pago, concepto, created_at')
       .eq('fecha', hoy)
       .order('id', { ascending: false }),
-    supabase.from('cash_closures')
+    client.from('cash_closures')
       .select('id, fecha, apertura, ingresos, egresos, esperado, real_contado, diferencia')
       .order('fecha', { ascending: false })
       .limit(15),

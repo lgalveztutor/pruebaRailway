@@ -15,8 +15,8 @@ export default function ConsolaForm() {
     setMsg(null);
     if (!nombre.trim()) { setMsg({ t: 'err', m: 'Poné un nombre.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('consoles').insert({ nombre: nombre.trim() });
+    const client = createClient();
+    const { error } = await client.from('consoles').insert({ nombre: nombre.trim() });
     setLoading(false);
     if (error) { setMsg({ t: 'err', m: 'Error: ' + error.message }); return; }
     setNombre('');

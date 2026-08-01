@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export default async function CumpleanosPage() {
   let rows = [];
   let err = null;
-  const supabase = createClient();
+  const client = createClient();
   const { data, error } = await supabase
     .from('birthday_reservations')
     .select('id, cumpleanero, edad, fecha, horario, cant_chicos, cant_adultos, pack, sena, total, estado')

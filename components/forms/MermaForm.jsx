@@ -25,18 +25,18 @@ export default function MermaForm({ products = [] }) {
     if (cant <= 0) { setMsg({ t: 'err', m: 'Cantidad inválida.' }); return; }
 
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
     const prod = products.find((p) => String(p.id) === String(f.product_id));
 
     // Saca del stock vendible las unidades vencidas/dañadas.
-    const { data: cur } = await supabase.from('products').select('stock_actual').eq('id', f.product_id).single();
+    const { data: cur } = await client.from('products').select('stock_actual').eq('id', f.product_id).single();
     const nuevo = Number(cur?.stock_actual ?? 0) - cant;
-    const { error: e1 } = await supabase.from('products').update({ stock_actual: nuevo }).eq('id', f.product_id);
+    const { error: e1 } = await client.from('products').update({ stock_actual: nuevo }).eq('id', f.product_id);
     if (e1) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + e1.message }); return; }
 
     // Deja registrado el movimiento (queda como aviso/novedad).
-    const { error: e2 } = await supabase.from('stock_movements').insert({
+    const { error: e2 } = await client.from('stock_movements').insert({
       product_id: Number(f.product_id), tipo: 'egreso', cantidad: cant,
       motivo: 'Devolución: ' + f.motivo, usuario_id: user?.id ?? null,
     });

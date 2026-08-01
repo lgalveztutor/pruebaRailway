@@ -144,7 +144,7 @@ export default async function VentasPage() {
   let stockProducts = [];
   let err = null;
 
-  const supabase = createClient();
+  const client = createClient();
   const { data, error } = await supabase
     .from('sale_items')
     .select('id, descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)')

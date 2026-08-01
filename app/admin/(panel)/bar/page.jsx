@@ -8,11 +8,11 @@ export default async function BarPage() {
   let products = [];
   let ventasBar = [];
   let err = null;
-  const supabase = createClient();
+  const client = createClient();
   const hoy = hoyISO();
   const [p, v] = await Promise.all([
-    supabase.from('products').select('id, nombre, precio, stock_actual').eq('activo', true).order('nombre', { ascending: true }),
-    supabase.from('sale_items').select('id, descripcion, cantidad, total, sales!inner(fecha)').eq('categoria', 'bar').gte('sales.fecha', hoy).order('id', { ascending: false }).limit(50),
+    client.from('products').select('id, nombre, precio, stock_actual').eq('activo', true).order('nombre', { ascending: true }),
+    client.from('sale_items').select('id, descripcion, cantidad, total, sales!inner(fecha)').eq('categoria', 'bar').gte('sales.fecha', hoy).order('id', { ascending: false }).limit(50),
   ]);
   products = p.data || [];
   ventasBar = v.data || [];

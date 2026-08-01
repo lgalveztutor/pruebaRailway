@@ -28,7 +28,7 @@ export default function ReservaForm() {
     if (!f.nombre.trim()) { setMsg({ t: 'err', m: 'Cargá el nombre del cliente.' }); return; }
     if (!f.fecha) { setMsg({ t: 'err', m: 'Cargá la fecha.' }); return; }
     setLoading(true);
-    const supabase = createClient();
+    const client = createClient();
 
     // Descuento de bienvenida automático (una sola vez + suma visita de fidelidad).
     let pctReal = 0;
@@ -39,7 +39,7 @@ export default function ReservaForm() {
     const baseTotal = f.total_estimado ? Number(f.total_estimado) : 0;
     const totalFinal = pctReal > 0 ? aplicarPct(baseTotal, pctReal) : baseTotal;
 
-    const { error } = await supabase.from('reservations').insert({
+    const { error } = await client.from('reservations').insert({
       nombre: f.nombre.trim(),
       telefono: f.telefono || null,
       fecha: f.fecha,

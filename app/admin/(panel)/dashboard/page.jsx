@@ -15,15 +15,15 @@ function ayerISO() {
 async function getKpis(supabase, hoy) {
   const ayer = ayerISO();
   const [ventas, ventasAyer, gastos, gastosAyer, caja, productos, reservasHoy, cumpleProx, clientesNuevos] = await Promise.all([
-    supabase.from('sales').select('total').eq('fecha', hoy),
-    supabase.from('sales').select('total').eq('fecha', ayer),
-    supabase.from('expenses').select('monto').eq('fecha', hoy),
-    supabase.from('expenses').select('monto').eq('fecha', ayer),
-    supabase.from('cash_movements').select('tipo, monto').eq('fecha', hoy),
-    supabase.from('products').select('stock_actual, stock_min'),
-    supabase.from('reservations').select('id', { count: 'exact', head: true }).eq('fecha', hoy),
-    supabase.from('birthday_reservations').select('id', { count: 'exact', head: true }).gte('fecha', hoy).neq('estado', 'cancelado'),
-    supabase.from('clients').select('id', { count: 'exact', head: true }).gte('created_at', hoy + 'T00:00:00'),
+    client.from('sales').select('total').eq('fecha', hoy),
+    client.from('sales').select('total').eq('fecha', ayer),
+    client.from('expenses').select('monto').eq('fecha', hoy),
+    client.from('expenses').select('monto').eq('fecha', ayer),
+    client.from('cash_movements').select('tipo, monto').eq('fecha', hoy),
+    client.from('products').select('stock_actual, stock_min'),
+    client.from('reservations').select('id', { count: 'exact', head: true }).eq('fecha', hoy),
+    client.from('birthday_reservations').select('id', { count: 'exact', head: true }).gte('fecha', hoy).neq('estado', 'cancelado'),
+    client.from('clients').select('id', { count: 'exact', head: true }).gte('created_at', hoy + 'T00:00:00'),
   ]);
   const sum = (rows, key) => (rows || []).reduce((a, r) => a + Number(r[key] || 0), 0);
   const ventasHoy = sum(ventas.data, 'total');
@@ -48,15 +48,15 @@ async function getKpis(supabase, hoy) {
 async function getCharts(supabase) {
   const mesInicio = hoyISO().slice(0, 8) + '01';
   const [visitas, clics, consultas, reservasCnt, resv, cumples, pools, donutRaw, topRaw] = await Promise.all([
-    supabase.from('web_events').select('id', { count: 'exact', head: true }).eq('tipo', 'visita'),
-    supabase.from('web_events').select('id', { count: 'exact', head: true }).eq('tipo', 'clic_whatsapp'),
-    supabase.from('web_leads').select('id', { count: 'exact', head: true }),
-    supabase.from('reservations').select('id', { count: 'exact', head: true }),
-    supabase.from('reservations').select('fecha, hora').limit(2000),
-    supabase.from('birthday_reservations').select('fecha, horario').limit(2000),
-    supabase.from('poolfootball_sessions').select('fecha, inicio').limit(2000),
-    supabase.from('sale_items').select('categoria, total, sales!inner(fecha)').gte('sales.fecha', mesInicio),
-    supabase.from('sale_items').select('product_id, cantidad, products(nombre, stock_actual, stock_min)').not('product_id', 'is', null).limit(3000),
+    client.from('web_events').select('id', { count: 'exact', head: true }).eq('tipo', 'visita'),
+    client.from('web_events').select('id', { count: 'exact', head: true }).eq('tipo', 'clic_whatsapp'),
+    client.from('web_leads').select('id', { count: 'exact', head: true }),
+    client.from('reservations').select('id', { count: 'exact', head: true }),
+    client.from('reservations').select('fecha, hora').limit(2000),
+    client.from('birthday_reservations').select('fecha, horario').limit(2000),
+    client.from('poolfootball_sessions').select('fecha, inicio').limit(2000),
+    client.from('sale_items').select('categoria, total, sales!inner(fecha)').gte('sales.fecha', mesInicio),
+    client.from('sale_items').select('product_id, cantidad, products(nombre, stock_actual, stock_min)').not('product_id', 'is', null).limit(3000),
   ]);
 
   const funnel = [
@@ -112,7 +112,7 @@ function TrendBadge({ v }) {
 export default async function DashboardPage() {
   let k = null, charts = null, err = null;
   try {
-    const supabase = createClient();
+    const client = createClient();
     [k, charts] = await Promise.all([getKpis(supabase, hoyISO()), getCharts(supabase)]);
   } catch (e) { err = e.message; }
 

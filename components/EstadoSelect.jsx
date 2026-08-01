@@ -15,8 +15,8 @@ export default function EstadoSelect({ tabla, id, value, options, campo = 'estad
     const nuevo = e.target.value;
     setVal(nuevo);
     setSaving(true);
-    const supabase = createClient();
-    const { error } = await supabase.from(tabla).update({ [campo]: nuevo }).eq('id', id);
+    const client = createClient();
+    const { error } = await client.from(tabla).update({ [campo]: nuevo }).eq('id', id);
     setSaving(false);
     if (error) { alert('No se pudo guardar: ' + error.message); setVal(value || ''); return; }
     router.refresh();

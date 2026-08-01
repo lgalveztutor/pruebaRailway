@@ -21,9 +21,9 @@ export default function CierreForm({ ingresos, egresos }) {
     setMsg(null);
     if (realContado === '') { setMsg({ t: 'err', m: 'Cargá el efectivo contado.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const { error } = await supabase.from('cash_closures').insert({
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
+    const { error } = await client.from('cash_closures').insert({
       fecha: hoyISO(),
       usuario_id: user?.id ?? null,
       apertura: Number(apertura || 0),

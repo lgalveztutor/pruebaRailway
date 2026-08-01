@@ -64,10 +64,10 @@ export default function VentaForm({ products = [] }) {
     }
 
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
 
-    const { error } = await supabase.rpc('registrar_venta_productos', {
+    const { error } = await client.rpc('registrar_venta_productos', {
       p_fecha: hoyISO(),
       p_medio_pago: medio,
       p_empleado_id: user?.id ?? null,

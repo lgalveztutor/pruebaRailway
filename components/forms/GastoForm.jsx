@@ -42,8 +42,8 @@ export default function GastoForm() {
     if (esCapex && (!f.vida_util || Number(f.vida_util) <= 0)) { setMsg({ t: 'err', m: 'Para CAPEX, cargá la vida útil en meses (ej: 24).' }); return; }
 
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('expenses').insert({
+    const client = createClient();
+    const { error } = await client.from('expenses').insert({
       fecha: f.fecha,
       categoria: f.categoria,
       concepto: f.concepto || null,

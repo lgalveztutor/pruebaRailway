@@ -17,8 +17,8 @@ export default function ProductoForm() {
     setMsg(null);
     if (!f.nombre.trim()) { setMsg({ t: 'err', m: 'El nombre es obligatorio.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('products').insert({
+    const client = createClient();
+    const { error } = await client.from('products').insert({
       nombre: f.nombre.trim(),
       categoria: f.categoria,
       stock_actual: Number(f.stock_actual || 0),

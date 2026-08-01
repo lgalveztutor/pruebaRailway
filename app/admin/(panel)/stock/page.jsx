@@ -12,12 +12,12 @@ export default async function StockPage() {
   let rows = [];
   let mermas = [];
   let err = null;
-  const supabase = createClient();
+  const client = createClient();
   const [p, m] = await Promise.all([
-    supabase.from('products')
+    client.from('products')
       .select('id, nombre, categoria, stock_actual, stock_min, costo, precio, proveedor, activo')
       .order('nombre', { ascending: true }).limit(300),
-    supabase.from('stock_movements')
+    client.from('stock_movements')
       .select('id, cantidad, motivo, fecha, products(nombre)')
       .ilike('motivo', 'Devolución%')
       .order('fecha', { ascending: false }).limit(15),

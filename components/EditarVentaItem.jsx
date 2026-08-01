@@ -16,8 +16,8 @@ export default function EditarVentaItem({ id, descripcion, duplicado }) {
 
   async function guardarDetalle() {
     setBusy(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('sale_items').update({ descripcion: desc }).eq('id', id);
+    const client = createClient();
+    const { error } = await client.from('sale_items').update({ descripcion: desc }).eq('id', id);
     setBusy(false);
     if (error) { alert('No se pudo guardar: ' + error.message); return; }
     setModo('normal');
@@ -30,8 +30,8 @@ export default function EditarVentaItem({ id, descripcion, duplicado }) {
       : '¿Seguro que querés eliminar este registro?');
     if (!ok) return;
     setBusy(true);
-    const supabase = createClient();
-    const { error } = await supabase.from('sale_items').delete().eq('id', id);
+    const client = createClient();
+    const { error } = await client.from('sale_items').delete().eq('id', id);
     setBusy(false);
     if (error) { alert('No se pudo eliminar: ' + error.message); return; }
     router.refresh();

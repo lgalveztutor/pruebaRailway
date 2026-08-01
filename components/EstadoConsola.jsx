@@ -20,8 +20,8 @@ export default function EstadoConsola({ id, estado }) {
     const nuevo = e.target.value;
     setVal(nuevo);
     setSaving(true);
-    const supabase = createClient();
-    await supabase.from('consoles').update({ estado: nuevo }).eq('id', id);
+    const client = createClient();
+    await client.from('consoles').update({ estado: nuevo }).eq('id', id);
     setSaving(false);
     router.refresh();
   }

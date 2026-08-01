@@ -17,10 +17,10 @@ export default function ConsolaSessionForm({ consoles }) {
     setMsg(null);
     if (!f.console_id) { setMsg({ t: 'err', m: 'Elegí una consola.' }); return; }
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
     const precio = f.precio ? Number(f.precio) : 0;
-    const { error } = await supabase.rpc('registrar_sesion_consola', {
+    const { error } = await client.rpc('registrar_sesion_consola', {
       p_console_id: Number(f.console_id),
       p_juego: f.juego || null,
       p_inicio: f.inicio || null,

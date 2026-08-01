@@ -17,7 +17,7 @@ export default function ClienteForm() {
   async function validarCodigo() {
     const cod = f.codigo.trim().toUpperCase();
     if (!cod) { setRef(null); return; }
-    const supabase = createClient();
+    const client = createClient();
     const { data } = await supabase
       .from('referral_codes')
       .select('codigo, referidor, descuento_pct, activo')
@@ -37,7 +37,7 @@ export default function ClienteForm() {
 
     const cod = f.codigo.trim().toUpperCase();
     setLoading(true);
-    const supabase = createClient();
+    const client = createClient();
 
     // Candado: 1 código por persona. Si el teléfono ya usó un código, no aplica de nuevo.
     if (cod) {
@@ -57,7 +57,7 @@ export default function ClienteForm() {
       }
     }
 
-    const { error } = await supabase.from('clients').insert({
+    const { error } = await client.from('clients').insert({
       nombre: f.nombre.trim(),
       telefono: f.telefono || null,
       email: f.email || null,
@@ -68,7 +68,7 @@ export default function ClienteForm() {
     if (error) { setLoading(false); setMsg({ t: 'err', m: 'Error: ' + error.message }); return; }
 
     // Suma 1 uso al código.
-    if (cod && ref?.valido) { await supabase.rpc('usar_codigo', { p_codigo: cod }); }
+    if (cod && ref?.valido) { await client.rpc('usar_codigo', { p_codigo: cod }); }
 
     setLoading(false);
     setF({ nombre: '', telefono: '', email: '', cumpleanos: '', codigo: '' });

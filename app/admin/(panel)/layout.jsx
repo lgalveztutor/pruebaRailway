@@ -7,10 +7,10 @@ import { createClient } from '@/lib/postgres-client.server';
 export default async function PanelLayout({ children }) {
   let userEmail = null;
 
-  const supabase = createClient();
+  const client = createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await client.auth.getUser();
 
   // Sin sesion -> al login (defensa en profundidad, por si falla el middleware).
   if (!user) {

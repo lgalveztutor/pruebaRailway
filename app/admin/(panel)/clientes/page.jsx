@@ -14,20 +14,20 @@ export default async function ClientesPage() {
   let invitados = [];
   let err = null;
   let invErr = null;
-  const supabase = createClient();
+  const client = createClient();
 
   // Retención: purga contactos de invitados con más de 31 días (no satura la base).
-  await supabase.rpc('purgar_invitados_viejos');
+  await client.rpc('purgar_invitados_viejos');
 
   const [c, l, g] = await Promise.all([
-    supabase.from('clients')
+    client.from('clients')
       .select('id, nombre, telefono, email, cumpleanos, codigo_referido, descuento_pct, created_at')
       .order('created_at', { ascending: false }).limit(200),
-    supabase.from('web_leads')
+    client.from('web_leads')
       .select('id, nombre, telefono, experiencia, dia, hora, personas, codigo_referido, created_at')
       .eq('atendido', false)
       .order('created_at', { ascending: false }).limit(100),
-    supabase.from('birthday_guests')
+    client.from('birthday_guests')
       .select('id, cumple_nombre, cumple_telefono, cumple_fecha, nino_nombre, nino_detalle, adulto_nombre, adulto_telefono, created_at')
       .order('created_at', { ascending: false }).limit(1000),
   ]);

@@ -11,8 +11,8 @@ export default function AtenderLead({ id }) {
 
   async function atender() {
     setLoading(true);
-    const supabase = createClient();
-    await supabase.from('web_leads').update({ atendido: true }).eq('id', id);
+    const client = createClient();
+    await client.from('web_leads').update({ atendido: true }).eq('id', id);
     setLoading(false);
     router.refresh();
   }

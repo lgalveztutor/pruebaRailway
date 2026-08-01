@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/postgres-client';
 
@@ -31,26 +31,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  const configured =
-    Boolean(process.env.DATABASE_URL);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    if (!configured) {
-      setError(`DATABASE_URL: ${process.env.DATABASE_URL}, configured: ${configured}`);
-      return;
-    }
     setLoading(true);
     try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const client = createClient();
+      const { error } = await client.auth.signInWithPassword({ email, password });
       if (error) {
         setError(error.message || 'Email o contraseña incorrectos.');
         setLoading(false);
@@ -135,11 +123,6 @@ export default function LoginPage() {
             style={{ color: '#67e8f9', textDecoration: 'none' }}>¿Olvidaste tu contraseña?</a>
         </div>
 
-        {mounted && !configured && (
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,.5)', textAlign: 'center', margin: 0 }}>
-            Modo desarrollo: PostgreSQL aún no configurado.
-          </p>
-        )}
       </form>
     </div>
   );

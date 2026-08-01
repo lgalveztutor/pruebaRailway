@@ -22,9 +22,9 @@ export default function CajaMovForm() {
       return;
     }
     setLoading(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const { error } = await supabase.from('cash_movements').insert({
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
+    const { error } = await client.from('cash_movements').insert({
       fecha: hoyISO(),
       usuario_id: user?.id ?? null,
       tipo: f.tipo,
