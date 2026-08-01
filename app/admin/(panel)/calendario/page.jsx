@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { hoyISO } from '@/lib/format';
 import CalendarDay from '@/components/CalendarDay';
 
@@ -28,16 +28,14 @@ export default async function CalendarioPage({ searchParams }) {
   let reservas = [];
   let cumples = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const [r, b] = await Promise.all([
-      supabase.from('reservations').select('id, fecha, hora, nombre, tipo').gte('fecha', start).lte('fecha', end),
-      supabase.from('birthday_reservations').select('id, fecha, horario, cumpleanero').gte('fecha', start).lte('fecha', end),
-    ]);
-    reservas = r.data || [];
-    cumples = b.data || [];
-    err = r.error?.message || b.error?.message || null;
-  }
+  const supabase = createClient();
+  const [r, b] = await Promise.all([
+    supabase.from('reservations').select('id, fecha, hora, nombre, tipo').gte('fecha', start).lte('fecha', end),
+    supabase.from('birthday_reservations').select('id, fecha, horario, cumpleanero').gte('fecha', start).lte('fecha', end),
+  ]);
+  reservas = r.data || [];
+  cumples = b.data || [];
+  err = r.error?.message || b.error?.message || null;
 
   // Mapa fecha -> eventos
   const eventos = {};

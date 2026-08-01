@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money, fechaCorta } from '@/lib/format';
 import ProductoForm from '@/components/forms/ProductoForm';
 import StockMovForm from '@/components/forms/StockMovForm';
@@ -12,21 +12,19 @@ export default async function StockPage() {
   let rows = [];
   let mermas = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const [p, m] = await Promise.all([
-      supabase.from('products')
-        .select('id, nombre, categoria, stock_actual, stock_min, costo, precio, proveedor, activo')
-        .order('nombre', { ascending: true }).limit(300),
-      supabase.from('stock_movements')
-        .select('id, cantidad, motivo, fecha, products(nombre)')
-        .ilike('motivo', 'Devolución%')
-        .order('fecha', { ascending: false }).limit(15),
-    ]);
-    rows = p.data || [];
-    mermas = m.data || [];
-    if (p.error) err = p.error.message;
-  }
+  const supabase = createClient();
+  const [p, m] = await Promise.all([
+    supabase.from('products')
+      .select('id, nombre, categoria, stock_actual, stock_min, costo, precio, proveedor, activo')
+      .order('nombre', { ascending: true }).limit(300),
+    supabase.from('stock_movements')
+      .select('id, cantidad, motivo, fecha, products(nombre)')
+      .ilike('motivo', 'Devolución%')
+      .order('fecha', { ascending: false }).limit(15),
+  ]);
+  rows = p.data || [];
+  mermas = m.data || [];
+  if (p.error) err = p.error.message;
 
   const bajos = rows.filter((x) => Number(x.stock_actual) <= Number(x.stock_min)).length;
   const productosLite = rows.map((p) => ({ id: p.id, nombre: p.nombre, stock_actual: p.stock_actual }));

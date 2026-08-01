@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 
 // Acciones al final de cada item de venta:
 // - Aviso "Repetido" si el registro está duplicado ese día

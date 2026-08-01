@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Estados editables (Paso 7) — libera los estados de turnos y cumpleaños
 -- para poder usar "pago completo", "seña", etc. desde el panel.
--- Pegar en Supabase -> SQL Editor -> Run. Idempotente.
+-- Pegar en PostgreSQL -> SQL Editor -> Run. Idempotente.
 -- =====================================================================
 
 -- Quita la restricción que solo permitía un set fijo de estados.

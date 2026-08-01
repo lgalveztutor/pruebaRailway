@@ -1,6 +1,6 @@
 -- =====================================================================
 -- LA CHISPA GAMER 1.8 — Base de datos (Paso 3)
--- Tablas + Roles + Seguridad (RLS). Para pegar en Supabase -> SQL Editor.
+-- Tablas + Roles + Seguridad (RLS). Para pegar en PostgreSQL -> SQL Editor.
 -- Es idempotente: se puede correr varias veces sin romper nada.
 -- =====================================================================
 

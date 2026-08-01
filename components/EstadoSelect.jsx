@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 
 // Selector de estado editable en vivo. Sirve para cualquier tabla/columna.
 // props: tabla, id, value, options=[{v,label}], campo='estado'

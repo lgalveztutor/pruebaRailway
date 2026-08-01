@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { fechaCorta, money, hoyISO } from '@/lib/format';
 import GastoForm from '@/components/forms/GastoForm';
 
@@ -31,17 +31,15 @@ function TablaGastos({ items }) {
 export default async function GastosPage() {
   let rows = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('expenses')
-      .select('id, fecha, categoria, concepto, monto, medio_pago')
-      .order('fecha', { ascending: false })
-      .order('id', { ascending: false })
-      .limit(500);
-    rows = data || [];
-    if (error) err = error.message;
-  }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('expenses')
+    .select('id, fecha, categoria, concepto, monto, medio_pago')
+    .order('fecha', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(500);
+  rows = data || [];
+  if (error) err = error.message;
 
   const hoy = hoyISO();
   const gastosHoy = rows.filter((g) => g.fecha === hoy);

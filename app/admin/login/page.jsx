@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 
 // Diseño "1c — Franjas neón" (collage inclinado + líneas neón + tarjeta glass).
 const ACCENT = '#ff2d8d';
@@ -33,14 +33,13 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const configured =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    Boolean(process.env.DATABASE_URL);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     if (!configured) {
-      setError('Falta configurar Supabase. Cargá las variables en .env.local.');
+      setError('Falta configurar DATABASE_URL en .env.local.');
       return;
     }
     setLoading(true);
@@ -48,14 +47,7 @@ export default function LoginPage() {
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        const m = (error.message || '').toLowerCase();
-        if (m.includes('email not confirmed')) {
-          setError('El email no está confirmado. En Supabase marcá "Auto Confirm User" o desactivá la confirmación de email.');
-        } else if (m.includes('invalid login')) {
-          setError('Email o contraseña incorrectos.');
-        } else {
-          setError('Error: ' + error.message);
-        }
+        setError(error.message || 'Email o contraseña incorrectos.');
         setLoading(false);
         return;
       }
@@ -134,13 +126,13 @@ export default function LoginPage() {
         </button>
 
         <div style={{ textAlign: 'center', fontSize: 12.5 }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); setError('Para resetear la contraseña, pedísela al dueño o cambiala en Supabase → Authentication.'); }}
+          <a href="#" onClick={(e) => { e.preventDefault(); setError('Para resetear la contraseña, pedísela al dueño o cambiala directamente en la tabla profiles.'); }}
             style={{ color: '#67e8f9', textDecoration: 'none' }}>¿Olvidaste tu contraseña?</a>
         </div>
 
         {!configured && (
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,.5)', textAlign: 'center', margin: 0 }}>
-            Modo desarrollo: Supabase aún no configurado.
+            Modo desarrollo: PostgreSQL aún no configurado.
           </p>
         )}
       </form>

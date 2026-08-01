@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money } from '@/lib/format';
 import ConsolaForm from '@/components/forms/ConsolaForm';
 import ConsolaSessionForm from '@/components/forms/ConsolaSessionForm';
@@ -12,16 +12,14 @@ export default async function ConsolasPage() {
   let consoles = [];
   let sesiones = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const [c, s] = await Promise.all([
-      supabase.from('consoles').select('id, nombre, estado').order('nombre', { ascending: true }),
-      supabase.from('console_sessions').select('id, juego, inicio, fin, precio, estado, consoles(nombre)').order('id', { ascending: false }).limit(50),
-    ]);
-    consoles = c.data || [];
-    sesiones = s.data || [];
-    err = c.error?.message || s.error?.message || null;
-  }
+  const supabase = createClient();
+  const [c, s] = await Promise.all([
+    supabase.from('consoles').select('id, nombre, estado').order('nombre', { ascending: true }),
+    supabase.from('console_sessions').select('id, juego, inicio, fin, precio, estado, consoles(nombre)').order('id', { ascending: false }).limit(50),
+  ]);
+  consoles = c.data || [];
+  sesiones = s.data || [];
+  err = c.error?.message || s.error?.message || null;
 
   return (
     <div>

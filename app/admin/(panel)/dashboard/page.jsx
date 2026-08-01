@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money, hoyISO, offsetISO } from '@/lib/format';
 import { tipoVenta } from '@/lib/categorias';
 import FunnelConversion from '@/components/charts/FunnelConversion';
@@ -111,12 +111,10 @@ function TrendBadge({ v }) {
 
 export default async function DashboardPage() {
   let k = null, charts = null, err = null;
-  if (isSupabaseConfigured()) {
-    try {
-      const supabase = createClient();
-      [k, charts] = await Promise.all([getKpis(supabase, hoyISO()), getCharts(supabase)]);
-    } catch (e) { err = e.message; }
-  }
+  try {
+    const supabase = createClient();
+    [k, charts] = await Promise.all([getKpis(supabase, hoyISO()), getCharts(supabase)]);
+  } catch (e) { err = e.message; }
 
   const cards = [
     { label: 'Ventas del día', value: k ? money(k.ventasHoy) : '$ —', color: '#39FF14', trend: k?.ventasTrend },
@@ -173,12 +171,6 @@ export default async function DashboardPage() {
         </>
       )}
 
-      {!isSupabaseConfigured() && (
-        <div className="glass" style={{ padding: 18, marginTop: 22 }}>
-          <span className="badge badge-soon">Configurá Supabase</span>
-          <p style={{ color: 'var(--muted)', marginBottom: 0, marginTop: 14 }}>Cargá las claves en <code>.env.local</code> para ver los datos en vivo.</p>
-        </div>
-      )}
     </div>
   );
 }

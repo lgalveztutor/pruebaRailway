@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 
 // Botón para prender/apagar la disponibilidad de un producto (products.activo).
 export default function ToggleActivo({ id, activo }) {

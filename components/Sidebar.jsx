@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 
 const LINKS = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: '▦' },
@@ -28,7 +28,7 @@ export default function Sidebar({ userEmail }) {
       const supabase = createClient();
       await supabase.auth.signOut();
     } catch {
-      /* sin Supabase configurado aun */
+      /* sin sesion activa aun */
     }
     router.push('/admin/login');
   }

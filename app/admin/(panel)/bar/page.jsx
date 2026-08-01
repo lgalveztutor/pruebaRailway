@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money, hoyISO } from '@/lib/format';
 import BarForm from '@/components/forms/BarForm';
 
@@ -8,17 +8,15 @@ export default async function BarPage() {
   let products = [];
   let ventasBar = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const hoy = hoyISO();
-    const [p, v] = await Promise.all([
-      supabase.from('products').select('id, nombre, precio, stock_actual').eq('activo', true).order('nombre', { ascending: true }),
-      supabase.from('sale_items').select('id, descripcion, cantidad, total, sales!inner(fecha)').eq('categoria', 'bar').gte('sales.fecha', hoy).order('id', { ascending: false }).limit(50),
-    ]);
-    products = p.data || [];
-    ventasBar = v.data || [];
-    err = p.error?.message || v.error?.message || null;
-  }
+  const supabase = createClient();
+  const hoy = hoyISO();
+  const [p, v] = await Promise.all([
+    supabase.from('products').select('id, nombre, precio, stock_actual').eq('activo', true).order('nombre', { ascending: true }),
+    supabase.from('sale_items').select('id, descripcion, cantidad, total, sales!inner(fecha)').eq('categoria', 'bar').gte('sales.fecha', hoy).order('id', { ascending: false }).limit(50),
+  ]);
+  products = p.data || [];
+  ventasBar = v.data || [];
+  err = p.error?.message || v.error?.message || null;
 
   const totalHoy = ventasBar.reduce((a, r) => a + Number(r.total || 0), 0);
 

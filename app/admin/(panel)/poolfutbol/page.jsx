@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { fechaCorta, money } from '@/lib/format';
 import PoolForm from '@/components/forms/PoolForm';
 
@@ -7,17 +7,15 @@ export const dynamic = 'force-dynamic';
 export default async function PoolPage() {
   let rows = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('poolfootball_sessions')
-      .select('id, fecha, inicio, fin, jugadores, precio, estado, medio_pago')
-      .order('fecha', { ascending: false })
-      .order('id', { ascending: false })
-      .limit(200);
-    rows = data || [];
-    if (error) err = error.message;
-  }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('poolfootball_sessions')
+    .select('id, fecha, inicio, fin, jugadores, precio, estado, medio_pago')
+    .order('fecha', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(200);
+  rows = data || [];
+  if (error) err = error.message;
 
   return (
     <div>
