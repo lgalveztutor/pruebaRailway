@@ -17,7 +17,6 @@ export default async function handler(request, response) {
   if (!email || !password) {
     return sendJson(response, 400, { error: 'Email y contraseña son obligatorios.' });
   }
-  console.log("DATABASE_URL:", process.env.DATABASE_URL);
   const pool = getPool();
   const { rows } = await pool.query(
     `select id, nombre, email, rol, activo, password_hash

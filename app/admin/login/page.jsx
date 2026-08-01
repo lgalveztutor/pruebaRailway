@@ -44,7 +44,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     if (!configured) {
-      setError('Falta configurar DATABASE_URL en .env.local.');
+      setError(`DATABASE_URL: ${process.env.DATABASE_URL}, configured: ${configured}`);
       return;
     }
     setLoading(true);
