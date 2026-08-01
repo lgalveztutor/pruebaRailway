@@ -34,7 +34,7 @@ export default function LoginPage() {
   const [mounted, setMounted] = useState(false);
 
   const configured =
-    Boolean(process.env.DATABASE_URL);
+    Boolean(process.env.NEXT_PUBLIC_DATABASE_URL);
 
   useEffect(() => {
     setMounted(true);
