@@ -19,9 +19,9 @@ No encontré evidencia sólida de N+1 clásico, `select *` o `useEffect` problem
 2. La verificación de sesión está duplicada en middleware y en el layout del panel.
 	- Severidad: Alto.
 	- Impacto esperado: Tiempo, Red, UX.
-	- Evidencia: `middleware.js` llama `supabase.auth.getUser()` para cada ruta `/admin`, y `app/admin/(panel)/layout.jsx` vuelve a llamar `createClient()` + `getUser()` antes de renderizar el shell. Eso implica dos validaciones de sesión por navegación protegida, no una.
+	- Evidencia: `middleware.js` valida la cookie de sesión para cada ruta `/admin`, y `app/admin/(panel)/layout.jsx` vuelve a llamar `createClient()` + `getUser()` antes de renderizar el shell. Eso implica dos validaciones de sesión por navegación protegida, no una.
 	- Solución: centralizar la validación en una sola capa o reutilizar el resultado de la validación de entrada cuando el flujo lo permita; mantener solo la defensa mínima necesaria para el redirect, evitando repetir el fetch de usuario en el servidor si ya fue resuelto.
-	- Por qué mejora: elimina una ida y vuelta extra a Supabase por request protegido y reduce latencia perceptible en cada entrada al panel.
+	- Por qué mejora: elimina una ida y vuelta extra a PostgreSQL por request protegido y reduce latencia perceptible en cada entrada al panel.
 	- Riesgos: si se simplifica de más, se pierde defensa en profundidad; la refactorización debe conservar el comportamiento de redirect actual.
 	- Complejidad: Media.
 	- Estimación: Alta.
@@ -50,7 +50,7 @@ No encontré evidencia sólida de N+1 clásico, `select *` o `useEffect` problem
 
 # Problemas Críticos
 
-- El patrón más caro hoy es el mismo en más de una pantalla: leer muchos datos crudos desde Supabase y agregarlos en Node antes de renderizar. El caso de `dashboard/page.jsx` es especialmente costoso por volumen de consultas, duplicación de lecturas y agregación manual de matrices y rankings.
+- El patrón más caro hoy es el mismo en más de una pantalla: leer muchos datos crudos desde PostgreSQL y agregarlos en Node antes de renderizar. El caso de `dashboard/page.jsx` es especialmente costoso por volumen de consultas, duplicación de lecturas y agregación manual de matrices y rankings.
 
 # Problemas Importantes
 

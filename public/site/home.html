@@ -715,9 +715,6 @@ article:has(> .exp-rv):hover > .exp-rv{transform:scale(1.09);}
 
   // ----- WhatsApp reservation form -----
   var PHONE = CONTENT.phone;
-  // Supabase (claves públicas) para guardar la consulta de la web en Clientes (embudo).
-  var SUPA_URL = 'https://tevmrdehpijnprjazuyc.supabase.co';
-  var SUPA_KEY = 'sb_publishable_SHzUJI7ZI6EZsBw9v8eQPA_mx2SJcAu';
   function normalizeWhatsappLinks(){
     document.querySelectorAll('a[href*="wa.me/"]').forEach(function(a){
       a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + PHONE);
@@ -726,9 +723,9 @@ article:has(> .exp-rv):hover > .exp-rv{transform:scale(1.09);}
   // Tracking para el embudo del dashboard: visita + clics a WhatsApp.
   function trackEvent(tipo){
     try {
-      fetch(SUPA_URL + '/rest/v1/web_events', {
+      fetch('/api/public/web-events', {
         method: 'POST',
-        headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tipo: tipo })
       }).catch(function(){});
     } catch(e){}
@@ -769,9 +766,9 @@ article:has(> .exp-rv):hover > .exp-rv{transform:scale(1.09);}
   function guardarLead(){
     try {
       var persN = parseInt(val('lcg-f-personas'), 10);
-      fetch(SUPA_URL + '/rest/v1/web_leads', {
+      fetch('/api/public/web-leads', {
         method: 'POST',
-        headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: val('lcg-f-nombre') || null,
           telefono: val('lcg-f-tel') || null,

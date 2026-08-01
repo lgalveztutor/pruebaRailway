@@ -4,7 +4,7 @@
 
 Nombre: La Chispa Gamer 1.8
 
-Descripción: sistema web y panel de administración para un salón gamer. La web pública vive en `/` y el panel interno en `/admin`, ambos dentro del mismo proyecto Next.js y conectados a una única base de datos en Supabase.
+Descripción: sistema web y panel de administración para un salón gamer. La web pública vive en `/` y el panel interno en `/admin`, ambos dentro del mismo proyecto Next.js y conectados a una única base de datos PostgreSQL en Railway.
 
 Cliente: La Chispa Gamer
 
@@ -25,7 +25,7 @@ Resuelve la operación diaria de un salón gamer: captación de consultas desde 
 
 Los usuarios principales son el equipo interno del local. La web pública la usan visitantes y potenciales clientes; el panel lo usan dueño, gerente, empleados y contador según rol.
 
-Las funcionalidades principales incluyen login con Supabase Auth, dashboard con KPIs, formulario y listado de ventas, caja diaria, reservas, cumpleaños, stock, consolas, pool fútbol, gastos, clientes, calendario, reportes y captación de leads/eventos desde la web pública.
+Las funcionalidades principales incluyen login propio con cookie firmada, dashboard con KPIs, formulario y listado de ventas, caja diaria, reservas, cumpleaños, stock, consolas, pool fútbol, gastos, clientes, calendario, reportes y captación de leads/eventos desde la web pública.
 
 ---
 
@@ -49,11 +49,11 @@ Framework: Next.js del lado servidor, usando Server Components y middleware.
 
 Lenguaje: JavaScript.
 
-Base de datos: Supabase Postgres.
+Base de datos: PostgreSQL en Railway.
 
-ORM: no hay ORM detectado; el acceso se hace directo con `@supabase/supabase-js` y `@supabase/ssr`.
+ORM: no hay ORM detectado; el acceso se hace directo con `pg` y rutas internas del propio proyecto.
 
-Autenticación: Supabase Auth.
+Autenticación: migración pendiente a sesión propia del proyecto.
 
 ## Infraestructura
 
@@ -63,9 +63,9 @@ CI/CD: no se detecta pipeline definido en este workspace.
 
 Docker: no se detecta.
 
-Cloud: Supabase para Auth, base de datos y almacenamiento lógico del negocio.
+Cloud: Railway para PostgreSQL; la capa de datos y auth ya están desacopladas del proveedor anterior.
 
-Storage: Supabase para datos; además hay assets estáticos en `public/site/` y recursos de login en `public/login/`.
+Storage: PostgreSQL para datos; además hay assets estáticos en `public/site/` y recursos de login en `public/login/`.
 
 ---
 
@@ -73,8 +73,8 @@ Storage: Supabase para datos; además hay assets estáticos en `public/site/` y 
 
 | Variable | Descripción | Obligatoria |
 |----------|-------------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | URL pública del proyecto Supabase usada por cliente, servidor y middleware | Sí |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Anon key pública de Supabase para autenticación y consultas sujetas a RLS | Sí |
+| `DATABASE_URL` | Cadena de conexión a PostgreSQL en Railway usada por la capa server-side | Sí |
+| `AUTH_SECRET` | Secreto para firmar sesiones del panel cuando se complete la migración de auth | Recomendado |
 
 ---
 
@@ -86,7 +86,7 @@ Frontend público
 ↓
 rewrite `/` → `public/site/home.html`
 ↓
-captación de leads y eventos en Supabase
+captación de leads y eventos vía rutas internas hacia PostgreSQL
 
 Panel administrativo
 ↓
@@ -98,9 +98,9 @@ Server Components para lectura de datos
 ↓
 Client Components para formularios y mutaciones
 ↓
-Supabase Postgres con RLS
+PostgreSQL en Railway con sesión firmada por el proyecto
 
-El patrón dominante es “thin UI, data access directo”: las páginas del panel consultan Supabase desde el servidor para armar KPIs y tablas, mientras que los formularios del navegador escriben directamente con la anon key, apoyándose en RLS para seguridad.
+El patrón dominante es “thin UI, data access directo”: las páginas del panel consultan PostgreSQL desde el servidor para armar KPIs y tablas, mientras que los formularios del navegador escriben a rutas internas autenticadas o públicas según el caso.
 
 La web pública no se reconstruye dentro de React: se sirve tal como está exportada, para no alterar el sitio existente.
 
@@ -124,7 +124,7 @@ La web pública no se reconstruye dentro de React: se sirve tal como está expor
 
 `lib/`
 
-`lib/supabase/`
+`lib/`
 
 `db/`
 
@@ -142,8 +142,7 @@ Nombre | Uso | Motivo
 --- | --- | ---
 `next` | Framework principal | Define App Router, layouts, middleware, rewrites y Server Components
 `react` / `react-dom` | UI | Base de la interfaz
-`@supabase/supabase-js` | Cliente de Supabase | Consultas y mutaciones desde el navegador
-`@supabase/ssr` | Cliente SSR de Supabase | Integración con cookies, middleware y Server Components
+`pg` | Cliente PostgreSQL | Consultas y mutaciones server-side
 `recharts` | Gráficos | Dashboard con embudo, donut, heatmap y métricas visuales
 
 También son relevantes las utilidades locales en `lib/format.js`, `lib/categorias.js`, `lib/finanzas.js` y `lib/descuento.js`, porque centralizan cálculos de negocio que se reutilizan en varias pantallas.
@@ -153,20 +152,20 @@ También son relevantes las utilidades locales en `lib/format.js`, `lib/categori
 # Flujo principal
 
 1. El visitante entra al sitio público en `/`, servido desde `public/site/home.html`.
-2. La web pública puede registrar visitas, clics de WhatsApp, leads y formularios vinculados a Supabase.
+2. La web pública registra visitas, clics de WhatsApp, leads y listas de invitados mediante rutas internas.
 3. El usuario interno entra a `/admin`.
-4. `middleware.js` valida la sesión con Supabase y redirige a `/admin/login` si no hay usuario autenticado.
+4. `middleware.js` valida la sesión firmada y redirige a `/admin/login` si no hay usuario autenticado.
 5. Si hay sesión, `app/admin/(panel)/layout.jsx` vuelve a verificarla en servidor y renderiza el sidebar del panel.
-6. El dashboard lee KPIs, embudos y gráficos desde Supabase.
+6. El dashboard lee KPIs, embudos y gráficos desde PostgreSQL.
 7. Los módulos operativos permiten cargar ventas, caja, reservas, cumpleaños, stock, gastos, consolas, pool fútbol, clientes y reportes.
-8. Los cambios se guardan directo en Supabase y quedan limitados por RLS según el rol del usuario.
+8. Los cambios se guardan en PostgreSQL por rutas internas o mutaciones server-side.
 9. El usuario cierra sesión desde el sidebar y vuelve al login.
 
 ---
 
 # Convenciones
 
-Nomenclatura: mezcla de español funcional del negocio con nombres técnicos en inglés cuando vienen de Supabase o React.
+Nomenclatura: mezcla de español funcional del negocio con nombres técnicos en inglés cuando vienen de React o PostgreSQL.
 
 Formato: JavaScript moderno con componentes funcionales, Server Components y Client Components separados por necesidad.
 
@@ -182,7 +181,7 @@ Branches: no hay convención visible en el workspace.
 
 # Riesgos conocidos
 
-Problemas conocidos: gran parte de la seguridad depende de que las políticas RLS en Supabase estén correctas y completas.
+Problemas conocidos: la seguridad depende de la sesión firmada, los endpoints internos y los permisos de PostgreSQL.
 
 Limitaciones: la web pública está servida como HTML estático existente, así que cualquier cambio funcional en ese front requiere tratar ese asset con cuidado.
 
@@ -200,7 +199,7 @@ Riesgo de consistencia: hay múltiples rutas para el mismo dominio de negocio, p
 
 ## Patrón de autenticación y seguridad
 
-La protección de `/admin` se implementa en dos capas: middleware en la entrada de la ruta y verificación adicional en el layout del panel. Además, el login usa Supabase Auth en el navegador y refresca la navegación al dashboard.
+La protección de `/admin` se implementa en dos capas: middleware en la entrada de la ruta y verificación adicional en el layout del panel. El login usa sesión firmada propia y refresca la navegación al dashboard.
 
 La base de datos usa RLS por rol. Según los SQL del proyecto, existen roles de negocio como `dueno`, `gerente`, `empleado` y `contador`, con permisos diferenciados para lectura, escritura y borrado.
 
@@ -248,4 +247,4 @@ La base de datos usa RLS por rol. Según los SQL del proyecto, existen roles de 
 
 ## Observación funcional
 
-El proyecto no separa backend y frontend como aplicaciones distintas. La separación es por capas dentro de Next.js y por responsabilidad de archivos: UI de panel, utilidades de negocio, cliente/servidor de Supabase y SQL por pasos para la base de datos.
+El proyecto no separa backend y frontend como aplicaciones distintas. La separación es por capas dentro de Next.js y por responsabilidad de archivos: UI de panel, utilidades de negocio, client/server helpers, rutas internas y SQL unificado para la base de datos.

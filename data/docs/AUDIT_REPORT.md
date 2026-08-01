@@ -2,7 +2,7 @@
 
 ## Resumen Ejecutivo
 
-Estado general: Riesgoso. El sistema tiene buenas bases de separación entre panel, web pública y Supabase, pero hay exposiciones de datos y problemas de consistencia que conviene corregir antes de escalar.
+Estado general: Riesgoso. El sistema tiene buenas bases de separación entre panel, web pública y PostgreSQL, pero hay exposiciones de datos y problemas de consistencia que conviene corregir antes de escalar.
 
 Calificación: 4/10
 
@@ -104,7 +104,7 @@ Buenas prácticas relacionadas: idempotencia, control de concurrencia, bloqueo d
 
 # Mejoras sugeridas
 
-- Mover las operaciones críticas de venta, stock y descuentos a funciones transaccionales del lado de Supabase.
+- Mover las operaciones críticas de venta, stock y descuentos a funciones transaccionales del lado de PostgreSQL.
 - Revisar todas las políticas RLS de tablas con datos personales y reemplazar `true` por roles concretos.
 - Unificar el manejo de fechas en horario local del negocio.
 - Replantear el dashboard para que agregue datos en el servidor en vez de descargar filas crudas.
@@ -113,7 +113,7 @@ Buenas prácticas relacionadas: idempotencia, control de concurrencia, bloqueo d
 
 # Riesgos
 
-- Exposición de datos de clientes e invitados si se usa la anon key pública o si se compromete una sesión autenticada.
+- Exposición de datos de clientes e invitados si se compromete una sesión autenticada o un endpoint interno.
 - Descuadres de inventario y caja por escrituras parciales.
 - Reportes engañosos por truncado de datos y por desfases de fecha.
 

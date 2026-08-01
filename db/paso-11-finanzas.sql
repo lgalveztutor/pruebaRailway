@@ -1,6 +1,6 @@
 -- =====================================================================
 -- MOTOR FINANCIERO (Paso 11) — clasificación de egresos + depreciación
--- Pegar en Supabase -> SQL Editor -> Run. Idempotente.
+-- Pegar en PostgreSQL -> SQL Editor -> Run. Idempotente.
 -- =====================================================================
 
 -- Clasificación del gasto: opex_fijo | opex_variable | capex

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 import { hoyISO, money } from '@/lib/format';
 import { LABEL_CATEGORIA } from '@/lib/categorias';
 

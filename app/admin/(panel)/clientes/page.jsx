@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { fechaCorta } from '@/lib/format';
 import ClienteForm from '@/components/forms/ClienteForm';
 import AtenderLead from '@/components/AtenderLead';
@@ -14,30 +14,28 @@ export default async function ClientesPage() {
   let invitados = [];
   let err = null;
   let invErr = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
+  const supabase = createClient();
 
-    // Retención: purga contactos de invitados con más de 31 días (no satura la base).
-    await supabase.rpc('purgar_invitados_viejos');
+  // Retención: purga contactos de invitados con más de 31 días (no satura la base).
+  await supabase.rpc('purgar_invitados_viejos');
 
-    const [c, l, g] = await Promise.all([
-      supabase.from('clients')
-        .select('id, nombre, telefono, email, cumpleanos, codigo_referido, descuento_pct, created_at')
-        .order('created_at', { ascending: false }).limit(200),
-      supabase.from('web_leads')
-        .select('id, nombre, telefono, experiencia, dia, hora, personas, codigo_referido, created_at')
-        .eq('atendido', false)
-        .order('created_at', { ascending: false }).limit(100),
-      supabase.from('birthday_guests')
-        .select('id, cumple_nombre, cumple_telefono, cumple_fecha, nino_nombre, nino_detalle, adulto_nombre, adulto_telefono, created_at')
-        .order('created_at', { ascending: false }).limit(1000),
-    ]);
-    rows = c.data || [];
-    leads = l.data || [];
-    invitados = g.data || [];
-    err = c.error?.message || null;
-    invErr = g.error?.message || null;
-  }
+  const [c, l, g] = await Promise.all([
+    supabase.from('clients')
+      .select('id, nombre, telefono, email, cumpleanos, codigo_referido, descuento_pct, created_at')
+      .order('created_at', { ascending: false }).limit(200),
+    supabase.from('web_leads')
+      .select('id, nombre, telefono, experiencia, dia, hora, personas, codigo_referido, created_at')
+      .eq('atendido', false)
+      .order('created_at', { ascending: false }).limit(100),
+    supabase.from('birthday_guests')
+      .select('id, cumple_nombre, cumple_telefono, cumple_fecha, nino_nombre, nino_detalle, adulto_nombre, adulto_telefono, created_at')
+      .order('created_at', { ascending: false }).limit(1000),
+  ]);
+  rows = c.data || [];
+  leads = l.data || [];
+  invitados = g.data || [];
+  err = c.error?.message || null;
+  invErr = g.error?.message || null;
 
   // Agrupa los invitados en "carpetas" por cumpleañero.
   const carpetas = {};
@@ -93,7 +91,7 @@ export default async function ClientesPage() {
         </div>
 
         {invErr && (
-          <p className="form-msg err">No se pudo leer la tabla de invitados. Falta correr <code>db/paso-13-invitados.sql</code> en Supabase. ({invErr})</p>
+          <p className="form-msg err">No se pudo leer la tabla de invitados. Falta correr <code>db/paso-13-invitados.sql</code> en PostgreSQL. ({invErr})</p>
         )}
 
         {!invErr && invitados.length === 0 && (

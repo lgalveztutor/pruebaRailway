@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { fechaCorta, money } from '@/lib/format';
 import ReservaForm from '@/components/forms/ReservaForm';
 import WalkinForm from '@/components/forms/WalkinForm';
@@ -32,20 +32,19 @@ export default async function ReservasPage() {
   let walkins = [];
   let err = null;
 
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const [r, b, w] = await Promise.all([
-      supabase.from('reservations')
-        .select('id, nombre, telefono, fecha, hora, personas, tipo, sena, total_estimado, estado')
-        .order('fecha', { ascending: false }).limit(200),
-      supabase.from('birthday_reservations')
-        .select('id, cumpleanero, fecha, horario, cant_chicos, cant_adultos, sena, total, estado')
-        .order('fecha', { ascending: false }).limit(200),
-      supabase.from('walkin_orders')
-        .select('id, fecha, encargado, personas, sector, precio, pago_total, medio_pago, hora_pedida, hora_terminada, estado')
-        .order('id', { ascending: false }).limit(200),
-    ]);
-    err = r.error?.message || b.error?.message || w.error?.message || null;
+  const supabase = createClient();
+  const [r, b, w] = await Promise.all([
+    supabase.from('reservations')
+      .select('id, nombre, telefono, fecha, hora, personas, tipo, sena, total_estimado, estado')
+      .order('fecha', { ascending: false }).limit(200),
+    supabase.from('birthday_reservations')
+      .select('id, cumpleanero, fecha, horario, cant_chicos, cant_adultos, sena, total, estado')
+      .order('fecha', { ascending: false }).limit(200),
+    supabase.from('walkin_orders')
+      .select('id, fecha, encargado, personas, sector, precio, pago_total, medio_pago, hora_pedida, hora_terminada, estado')
+      .order('id', { ascending: false }).limit(200),
+  ]);
+  err = r.error?.message || b.error?.message || w.error?.message || null;
 
     const reservas = (r.data || []).map((x) => ({
       key: 'r' + x.id, tabla: 'reservations', rid: x.id, fecha: x.fecha, hora: x.hora, nombre: x.nombre, telefono: x.telefono,
@@ -57,8 +56,7 @@ export default async function ReservasPage() {
       tipo: 'cumpleaños', sena: x.sena, total: x.total, estado: x.estado, origen: 'Cumpleaños',
     }));
     conTurno = [...reservas, ...cumples].sort((a, z) => (a.fecha < z.fecha ? 1 : -1));
-    walkins = w.data || [];
-  }
+  walkins = w.data || [];
 
   return (
     <div>

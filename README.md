@@ -1,7 +1,7 @@
 # La Chispa Gamer 1.8 — Web + Panel /admin
 
 Un solo proyecto Next.js: la web pública en `/` y el panel de administración en `/admin`.
-Un solo hosting (Vercel) y una sola base de datos (Supabase). Costo mínimo.
+La base de datos apunta a PostgreSQL externo para Railway, y la capa de acceso se está migrando para dejar de depender de Supabase.
 
 ## 👀 Para el revisor — qué quiero que mires
 
@@ -56,13 +56,12 @@ lachispagamer/
 └── next.config.js              # rewrite "/" -> /site/home.html
 ```
 
-## Base de datos (Supabase)
+## Base de datos (PostgreSQL)
 
-El esquema y las políticas viven en `db/paso-*.sql`. Se corren **en orden** desde el SQL
-Editor de Supabase (Postgres). Cada archivo agrega una parte: tablas, RLS, roles, sistema
-de referidos/descuentos, listas de invitados, retención, etc. La seguridad se apoya en
-**Row Level Security**: la web pública usa la *anon key* (solo puede insertar leads,
-eventos e invitados), y el panel usa sesión autenticada.
+El esquema y las políticas viven en `db/paso-*.sql`. El archivo unificado `db/todo-en-uno.sql`
+ya está adaptado para pegarse en un ejecutor de PostgreSQL estándar como Railway.
+La seguridad ya no depende de la auth de Supabase: el siguiente paso es que el panel use
+sesión propia y que las escrituras entren por la capa server-side del proyecto.
 
 ## La web pública
 

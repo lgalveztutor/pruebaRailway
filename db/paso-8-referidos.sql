@@ -1,6 +1,6 @@
 -- =====================================================================
 -- SISTEMA DE REFERIDOS (Paso 8) — códigos tipo "BRUNENGER"
--- Pegar en Supabase -> SQL Editor -> Run. Idempotente.
+-- Pegar en PostgreSQL -> SQL Editor -> Run. Idempotente.
 -- =====================================================================
 
 -- Códigos de referido (los administra el dueño/gerente).

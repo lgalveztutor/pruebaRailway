@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money, hoyISO, fechaCorta } from '@/lib/format';
 import CajaMovForm from '@/components/forms/CajaMovForm';
 import CierreForm from '@/components/forms/CierreForm';
@@ -11,22 +11,20 @@ export default async function CajaPage() {
   let err = null;
   const hoy = hoyISO();
 
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const [m, c] = await Promise.all([
-      supabase.from('cash_movements')
-        .select('id, tipo, monto, medio_pago, concepto, created_at')
-        .eq('fecha', hoy)
-        .order('id', { ascending: false }),
-      supabase.from('cash_closures')
-        .select('id, fecha, apertura, ingresos, egresos, esperado, real_contado, diferencia')
-        .order('fecha', { ascending: false })
-        .limit(15),
-    ]);
-    movs = m.data || [];
-    cierres = c.data || [];
-    err = m.error?.message || c.error?.message || null;
-  }
+  const supabase = createClient();
+  const [m, c] = await Promise.all([
+    supabase.from('cash_movements')
+      .select('id, tipo, monto, medio_pago, concepto, created_at')
+      .eq('fecha', hoy)
+      .order('id', { ascending: false }),
+    supabase.from('cash_closures')
+      .select('id, fecha, apertura, ingresos, egresos, esperado, real_contado, diferencia')
+      .order('fecha', { ascending: false })
+      .limit(15),
+  ]);
+  movs = m.data || [];
+  cierres = c.data || [];
+  err = m.error?.message || c.error?.message || null;
 
   const ingresos = movs.filter((x) => x.tipo === 'ingreso').reduce((a, r) => a + Number(r.monto || 0), 0);
   const egresos = movs.filter((x) => x.tipo === 'egreso').reduce((a, r) => a + Number(r.monto || 0), 0);

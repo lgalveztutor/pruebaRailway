@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/postgres-client';
 import { CATEGORIAS_PRODUCTO, LABEL_CATEGORIA } from '@/lib/categorias';
 
 export default function ProductoForm() {

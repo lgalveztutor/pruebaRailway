@@ -1,6 +1,6 @@
 -- =====================================================================
 -- LA CHISPA GAMER 1.8 — Pulseras / Órdenes de llegada + Combos (Paso 6)
--- Pegar en Supabase -> SQL Editor -> Run. Es idempotente.
+-- Pegar en PostgreSQL -> SQL Editor -> Run. Es idempotente.
 -- =====================================================================
 
 -- Combos (editables desde el panel): color, precio y comida incluida.

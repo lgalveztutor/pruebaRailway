@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money, hoyISO, fechaCorta, PRECIO_HORA, offsetISO } from '@/lib/format';
 import { tipoVenta, LABEL_CATEGORIA } from '@/lib/categorias';
 import { clasificacionDe, depreciacionMensual } from '@/lib/finanzas';
@@ -36,52 +36,50 @@ export default async function ReportesPage({ searchParams }) {
   let fin = null;
   let err = null;
 
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const mesInicio = hoyISO().slice(0, 8) + '01';
-    const mesYYYYMM = hoyISO().slice(0, 7);
-    const [si, g, r, b, prod, gm, cx, sm] = await Promise.all([
-      supabase.from('sale_items').select('descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)').gte('sales.fecha', start).lte('sales.fecha', end),
-      supabase.from('expenses').select('id, fecha, categoria, concepto, monto').gte('fecha', start).lte('fecha', end).order('fecha', { ascending: false }),
-      supabase.from('reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
-      supabase.from('birthday_reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
-      supabase.from('products').select('nombre, stock_actual, stock_min'),
-      // Finanzas (siempre del mes en curso):
-      supabase.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').gte('fecha', mesInicio),
-      supabase.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').eq('clasificacion', 'capex'),
-      supabase.from('sale_items').select('categoria, total, sales!inner(fecha)').gte('sales.fecha', mesInicio),
-    ]);
-    items = si.data || [];
-    gastos = g.data || [];
-    reservasCount = r.count || 0;
-    cumplesCount = b.count || 0;
-    productosStock = prod.data || [];
-    err = si.error?.message || g.error?.message || null;
+  const supabase = createClient();
+  const mesInicio = hoyISO().slice(0, 8) + '01';
+  const mesYYYYMM = hoyISO().slice(0, 7);
+  const [si, g, r, b, prod, gm, cx, sm] = await Promise.all([
+    supabase.from('sale_items').select('descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)').gte('sales.fecha', start).lte('sales.fecha', end),
+    supabase.from('expenses').select('id, fecha, categoria, concepto, monto').gte('fecha', start).lte('fecha', end).order('fecha', { ascending: false }),
+    supabase.from('reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
+    supabase.from('birthday_reservations').select('id', { count: 'exact', head: true }).gte('fecha', start).lte('fecha', end),
+    supabase.from('products').select('nombre, stock_actual, stock_min'),
+    // Finanzas (siempre del mes en curso):
+    supabase.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').gte('fecha', mesInicio),
+    supabase.from('expenses').select('categoria, clasificacion, monto, fecha, vida_util_meses').eq('clasificacion', 'capex'),
+    supabase.from('sale_items').select('categoria, total, sales!inner(fecha)').gte('sales.fecha', mesInicio),
+  ]);
+  items = si.data || [];
+  gastos = g.data || [];
+  reservasCount = r.count || 0;
+  cumplesCount = b.count || 0;
+  productosStock = prod.data || [];
+  err = si.error?.message || g.error?.message || null;
 
-    // ---- Motor financiero (mes en curso) ----
-    let opexFijo = 0, opexVariable = 0, capexMes = 0;
-    for (const e of (gm.data || [])) {
-      const m = Number(e.monto || 0);
-      const c = clasificacionDe(e);
-      if (c === 'opex_fijo') opexFijo += m;
-      else if (c === 'capex') capexMes += m;
-      else opexVariable += m;
-    }
-    let depreMes = 0;
-    for (const a of (cx.data || [])) depreMes += depreciacionMensual(a, mesYYYYMM);
-    let ingServ = 0, ingProd = 0;
-    for (const it of (sm.data || [])) {
-      const t = Number(it.total || 0);
-      if (tipoVenta(it.categoria) === 'producto') ingProd += t; else ingServ += t;
-    }
-    const ingresosMes = ingServ + ingProd;
-    // Ganancia real: usa la depreciación en vez del CAPEX lump.
-    const gananciaReal = ingresosMes - opexFijo - opexVariable - depreMes;
-    const horasNecesarias = PRECIO_HORA > 0 ? Math.ceil(opexFijo / PRECIO_HORA) : 0;
-    const horasVendidas = PRECIO_HORA > 0 ? Math.floor(ingServ / PRECIO_HORA) : 0;
-    const progreso = horasNecesarias > 0 ? Math.min(100, Math.round((horasVendidas / horasNecesarias) * 100)) : (opexFijo === 0 ? 100 : 0);
-    fin = { opexFijo, opexVariable, capexMes, depreMes, ingresosMes, gananciaReal, horasNecesarias, horasVendidas, progreso, faltan: Math.max(0, horasNecesarias - horasVendidas) };
+  // ---- Motor financiero (mes en curso) ----
+  let opexFijo = 0, opexVariable = 0, capexMes = 0;
+  for (const e of (gm.data || [])) {
+    const m = Number(e.monto || 0);
+    const c = clasificacionDe(e);
+    if (c === 'opex_fijo') opexFijo += m;
+    else if (c === 'capex') capexMes += m;
+    else opexVariable += m;
   }
+  let depreMes = 0;
+  for (const a of (cx.data || [])) depreMes += depreciacionMensual(a, mesYYYYMM);
+  let ingServ = 0, ingProd = 0;
+  for (const it of (sm.data || [])) {
+    const t = Number(it.total || 0);
+    if (tipoVenta(it.categoria) === 'producto') ingProd += t; else ingServ += t;
+  }
+  const ingresosMes = ingServ + ingProd;
+  // Ganancia real: usa la depreciación en vez del CAPEX lump.
+  const gananciaReal = ingresosMes - opexFijo - opexVariable - depreMes;
+  const horasNecesarias = PRECIO_HORA > 0 ? Math.ceil(opexFijo / PRECIO_HORA) : 0;
+  const horasVendidas = PRECIO_HORA > 0 ? Math.floor(ingServ / PRECIO_HORA) : 0;
+  const progreso = horasNecesarias > 0 ? Math.min(100, Math.round((horasVendidas / horasNecesarias) * 100)) : (opexFijo === 0 ? 100 : 0);
+  fin = { opexFijo, opexVariable, capexMes, depreMes, ingresosMes, gananciaReal, horasNecesarias, horasVendidas, progreso, faltan: Math.max(0, horasNecesarias - horasVendidas) };
 
   const servicios = items.filter((it) => tipoVenta(it.categoria) === 'servicio');
   const productos = items.filter((it) => tipoVenta(it.categoria) === 'producto');

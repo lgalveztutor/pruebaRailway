@@ -1,24 +1,22 @@
 import { redirect } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 
 // Shell del panel: sidebar + contenido. Doble barrera de seguridad:
 // el middleware ya protege /admin, y acá volvemos a verificar la sesion en el servidor.
 export default async function PanelLayout({ children }) {
   let userEmail = null;
 
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    // Sin sesion -> al login (defensa en profundidad, por si falla el middleware).
-    if (!user) {
-      redirect('/admin/login');
-    }
-    userEmail = user.email;
+  // Sin sesion -> al login (defensa en profundidad, por si falla el middleware).
+  if (!user) {
+    redirect('/admin/login');
   }
+  userEmail = user.email;
 
   return (
     <div className="admin-shell">

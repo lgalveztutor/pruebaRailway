@@ -1,6 +1,6 @@
 -- =====================================================================
 -- EMBUDO WEB (Paso 9) — las consultas del formulario público caen en Clientes
--- Pegar en Supabase -> SQL Editor -> Run. Idempotente.
+-- Pegar en PostgreSQL -> SQL Editor -> Run. Idempotente.
 -- =====================================================================
 
 create table if not exists public.web_leads (

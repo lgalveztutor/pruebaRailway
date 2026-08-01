@@ -47,7 +47,7 @@ Esto ayuda en seguridad porque:
 - evita estados parciales si una escritura falla a mitad de camino.
 
 Esto ayuda en rendimiento porque:
-- reduce round trips entre frontend y Supabase;
+- reduce round trips entre frontend y PostgreSQL;
 - disminuye la latencia de acciones operativas;
 - evita varias escrituras separadas para una misma acción;
 - mejora el comportamiento bajo concurrencia.

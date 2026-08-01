@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { money, fechaCorta } from '@/lib/format';
 import { tipoVenta, LABEL_CATEGORIA } from '@/lib/categorias';
 import VentaForm from '@/components/forms/VentaForm';
@@ -144,33 +144,31 @@ export default async function VentasPage() {
   let stockProducts = [];
   let err = null;
 
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('sale_items')
-      .select('id, descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)')
-      .order('id', { ascending: false })
-      .limit(300);
-    err = error?.message || null;
-    const { data: sp } = await supabase
-      .from('products')
-      .select('id, nombre, categoria, precio, stock_actual')
-      .eq('activo', true)
-      .order('nombre', { ascending: true });
-    stockProducts = sp || [];
-    for (const it of data || []) {
-      const fila = {
-        id: it.id,
-        detalle: it.descripcion || LABEL_CATEGORIA[it.categoria] || 'Venta',
-        categoria: it.categoria,
-        cantidad: it.cantidad,
-        total: it.total,
-        fecha: it.sales?.fecha,
-        medio: it.sales?.medio_pago,
-      };
-      // Ventas = SOLO productos. Los servicios se agendan en Reservas.
-      if (tipoVenta(it.categoria) === 'producto') productos.push(fila);
-    }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('sale_items')
+    .select('id, descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)')
+    .order('id', { ascending: false })
+    .limit(300);
+  err = error?.message || null;
+  const { data: sp } = await supabase
+    .from('products')
+    .select('id, nombre, categoria, precio, stock_actual')
+    .eq('activo', true)
+    .order('nombre', { ascending: true });
+  stockProducts = sp || [];
+  for (const it of data || []) {
+    const fila = {
+      id: it.id,
+      detalle: it.descripcion || LABEL_CATEGORIA[it.categoria] || 'Venta',
+      categoria: it.categoria,
+      cantidad: it.cantidad,
+      total: it.total,
+      fecha: it.sales?.fecha,
+      medio: it.sales?.medio_pago,
+    };
+    // Ventas = SOLO productos. Los servicios se agendan en Reservas.
+    if (tipoVenta(it.categoria) === 'producto') productos.push(fila);
   }
 
   // Detectar repetidos: mismo día + mismo detalle + misma cantidad + mismo total

@@ -139,8 +139,6 @@
 <script>
 (function(){
   'use strict';
-  var SUPA_URL = 'https://tevmrdehpijnprjazuyc.supabase.co';
-  var SUPA_KEY = 'sb_publishable_SHzUJI7ZI6EZsBw9v8eQPA_mx2SJcAu';
   var guests = [];
 
   function $(id){ return document.getElementById(id); }
@@ -195,9 +193,9 @@
       return { cumple_nombre:v('c-nombre'), cumple_telefono:v('c-tel'), cumple_fecha:v('c-fecha')||null,
         nino_nombre:g.nino_nombre, nino_detalle:g.nino_detalle, adulto_nombre:g.adulto_nombre, adulto_telefono:g.adulto_telefono };
     });
-    fetch(SUPA_URL + '/rest/v1/birthday_guests', {
+    fetch('/api/public/birthday-guests', {
       method:'POST',
-      headers:{ 'apikey':SUPA_KEY, 'Authorization':'Bearer '+SUPA_KEY, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+      headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify(payload)
     }).then(function(r){
       if(r.ok){ msg('save-msg','ok','¡Listo! Guardamos '+guests.length+' invitado(s). Ya podés generar las tarjetas 👇'); buildCards(); }

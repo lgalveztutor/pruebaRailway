@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { createClient } from '@/lib/postgres-client';
 import { fechaCorta, money } from '@/lib/format';
 import CumpleForm from '@/components/forms/CumpleForm';
 
@@ -7,16 +7,14 @@ export const dynamic = 'force-dynamic';
 export default async function CumpleanosPage() {
   let rows = [];
   let err = null;
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('birthday_reservations')
-      .select('id, cumpleanero, edad, fecha, horario, cant_chicos, cant_adultos, pack, sena, total, estado')
-      .order('fecha', { ascending: false })
-      .limit(200);
-    rows = data || [];
-    if (error) err = error.message;
-  }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('birthday_reservations')
+    .select('id, cumpleanero, edad, fecha, horario, cant_chicos, cant_adultos, pack, sena, total, estado')
+    .order('fecha', { ascending: false })
+    .limit(200);
+  rows = data || [];
+  if (error) err = error.message;
 
   return (
     <div>
