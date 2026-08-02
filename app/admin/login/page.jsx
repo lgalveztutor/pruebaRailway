@@ -38,21 +38,19 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const client = createClient();
-      const { error } = await client.auth.signInWithPassword({ email, password });
-      if (error) {
-        setError(error.message || 'Email o contraseña incorrectos.');
-        setLoading(false);
-        return;
-      }
-      console.log("Status:", error.status);
-      console.log("Login OK, redirigiendo...");
-      // router.push('/admin/dashboard');
-      window.location.href = "/admin/dashboard";
-      console.log("router.push ejecutado");
-      router.refresh();
+
+      console.log("1");
+
+      const result = await client.auth.signInWithPassword({ email, password });
+
+      console.log("2", result);
+
+      router.push("/admin/dashboard");
+
+      console.log("3");
     } catch (err) {
-      setError('No se pudo conectar: ' + (err?.message || 'revisá la configuración.'));
-      setLoading(false);
+      console.error(err);
+      setError(err.stack || err.message);
     }
   }
 
