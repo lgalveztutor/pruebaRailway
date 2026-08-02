@@ -38,16 +38,11 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const client = createClient();
-
-      console.log("1");
-
+      
       const result = await client.auth.signInWithPassword({ email, password });
-
-      console.log("2", result);
 
       router.push("/admin/dashboard");
 
-      console.log("3");
     } catch (err) {
       console.error(err);
       setError(err.stack || err.message);
