@@ -8,7 +8,7 @@ export default async function CumpleanosPage() {
   let rows = [];
   let err = null;
   const client = createClient();
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from('birthday_reservations')
     .select('id, cumpleanero, edad, fecha, horario, cant_chicos, cant_adultos, pack, sena, total, estado')
     .order('fecha', { ascending: false })

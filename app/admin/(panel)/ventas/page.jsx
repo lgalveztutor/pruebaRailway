@@ -145,13 +145,13 @@ export default async function VentasPage() {
   let err = null;
 
   const client = createClient();
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from('sale_items')
     .select('id, descripcion, categoria, cantidad, total, sales!inner(fecha, medio_pago)')
     .order('id', { ascending: false })
     .limit(300);
   err = error?.message || null;
-  const { data: sp } = await supabase
+  const { data: sp } = await client
     .from('products')
     .select('id, nombre, categoria, precio, stock_actual')
     .eq('activo', true)

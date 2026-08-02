@@ -32,7 +32,7 @@ export default async function GastosPage() {
   let rows = [];
   let err = null;
   const client = createClient();
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from('expenses')
     .select('id, fecha, categoria, concepto, monto, medio_pago')
     .order('fecha', { ascending: false })

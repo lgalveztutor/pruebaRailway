@@ -8,7 +8,7 @@ export default async function PoolPage() {
   let rows = [];
   let err = null;
   const client = createClient();
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from('poolfootball_sessions')
     .select('id, fecha, inicio, fin, jugadores, precio, estado, medio_pago')
     .order('fecha', { ascending: false })

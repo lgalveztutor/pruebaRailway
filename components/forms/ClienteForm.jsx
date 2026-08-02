@@ -18,7 +18,7 @@ export default function ClienteForm() {
     const cod = f.codigo.trim().toUpperCase();
     if (!cod) { setRef(null); return; }
     const client = createClient();
-    const { data } = await supabase
+    const { data } = await client
       .from('referral_codes')
       .select('codigo, referidor, descuento_pct, activo')
       .ilike('codigo', cod)
@@ -43,7 +43,7 @@ export default function ClienteForm() {
     if (cod) {
       if (!ref?.valido) { setLoading(false); setMsg({ t: 'err', m: 'El código de referido no es válido.' }); return; }
       if (f.telefono.trim()) {
-        const { data: existe } = await supabase
+        const { data: existe } = await client
           .from('clients')
           .select('id')
           .eq('telefono', f.telefono.trim())

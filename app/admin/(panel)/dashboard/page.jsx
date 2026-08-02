@@ -12,7 +12,7 @@ function ayerISO() {
   return offsetISO(-1);
 }
 
-async function getKpis(supabase, hoy) {
+async function getKpis(client, hoy) {
   const ayer = ayerISO();
   const [ventas, ventasAyer, gastos, gastosAyer, caja, productos, reservasHoy, cumpleProx, clientesNuevos] = await Promise.all([
     client.from('sales').select('total').eq('fecha', hoy),
@@ -45,7 +45,7 @@ async function getKpis(supabase, hoy) {
   };
 }
 
-async function getCharts(supabase) {
+async function getCharts(client) {
   const mesInicio = hoyISO().slice(0, 8) + '01';
   const [visitas, clics, consultas, reservasCnt, resv, cumples, pools, donutRaw, topRaw] = await Promise.all([
     client.from('web_events').select('id', { count: 'exact', head: true }).eq('tipo', 'visita'),
@@ -113,7 +113,7 @@ export default async function DashboardPage() {
   let k = null, charts = null, err = null;
   try {
     const client = createClient();
-    [k, charts] = await Promise.all([getKpis(supabase, hoyISO()), getCharts(supabase)]);
+    [k, charts] = await Promise.all([getKpis(client, hoyISO()), getCharts(client)]);
   } catch (e) { err = e.message; }
 
   const cards = [
