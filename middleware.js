@@ -15,7 +15,6 @@ export async function middleware(request) {
 
   const user = await verifySessionToken(token);
 
-  console.log("Usuario:", user);
   const isLogin = pathname === '/admin/login';
 
   // Sin sesion y no esta en login -> al login
