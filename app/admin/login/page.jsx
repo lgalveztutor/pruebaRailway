@@ -46,7 +46,8 @@ export default function LoginPage() {
       }
       console.log("Status:", error.status);
       console.log("Login OK, redirigiendo...");
-      router.push('/admin/dashboard');
+      // router.push('/admin/dashboard');
+      window.location.href = "/admin/dashboard";
       console.log("router.push ejecutado");
       router.refresh();
     } catch (err) {

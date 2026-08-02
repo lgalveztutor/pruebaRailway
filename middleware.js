@@ -12,12 +12,9 @@ export async function middleware(request) {
   }
 
   const token = request.cookies.get('lcg_session')?.value;
-  console.log("Cookie presente:", !!token);
-  // const user = await verifySessionToken(token);
-  const user = {
-  id: "test",
-  email: "test@test.com",
-};
+
+  const user = await verifySessionToken(token);
+
   console.log("Usuario:", user);
   const isLogin = pathname === '/admin/login';
 
