@@ -19,7 +19,7 @@ const LINKS = [
   { href: '/admin/reportes', label: 'Reportes', icon: '📊' },
 ];
 
-export default function Sidebar({ userEmail }) {
+export default function Sidebar({ user }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -55,22 +55,39 @@ export default function Sidebar({ userEmail }) {
       </div>
 
       <nav className="admin-nav" onClick={() => setOpen(false)}>
-        {LINKS.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className={pathname === l.href ? 'active' : ''}
-          >
-            <span aria-hidden>{l.icon}</span>
-            {l.label}
-          </Link>
-        ))}
+        {(() => {
+          const rol = user?.rol || null;
+          const empleadoAllowed = new Set([
+            '/admin/caja',
+            '/admin/ventas',
+            '/admin/stock',
+            '/admin/calendario',
+            '/admin/reservas',
+          ]);
+
+          const visible = LINKS.filter((l) => {
+            if (rol === 'empleado') return empleadoAllowed.has(l.href);
+            // dueno, gerente, contador -> all links
+            return true;
+          });
+
+          return visible.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={pathname === l.href ? 'active' : ''}
+            >
+              <span aria-hidden>{l.icon}</span>
+              {l.label}
+            </Link>
+          ));
+        })()}
       </nav>
 
       <div className="admin-foot">
-        {userEmail && (
-          <div className="admin-user" title={userEmail}>
-            {userEmail}
+        {user?.email && (
+          <div className="admin-user" title={user.email}>
+            {user.email} ({user.rol})
           </div>
         )}
         <button className="admin-logout" onClick={logout}>
