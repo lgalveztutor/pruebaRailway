@@ -6,12 +6,9 @@ function sendJson(res, status, payload) {
 }
 
 export default async function handler(request, response) {
-  console.log("SERVER DATABASE_URL:", !!process.env.DATABASE_URL);
-  console.log("ENV KEYS:", Object.keys(process.env).filter(k => k.includes("DATABASE")));
   if (request.method !== 'POST') {
     return sendJson(response, 405, { error: 'Metodo no permitido.' });
   }
-  console.log("LOGIN API VERSION 2");
   const body = request.body || {};
   const email = String(body?.email || '').trim().toLowerCase();
   const password = String(body?.password || '');

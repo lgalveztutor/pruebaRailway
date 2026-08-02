@@ -44,7 +44,10 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
+      console.log("Status:", error.status);
+      console.log("Login OK, redirigiendo...");
       router.push('/admin/dashboard');
+      console.log("router.push ejecutado");
       router.refresh();
     } catch (err) {
       setError('No se pudo conectar: ' + (err?.message || 'revisá la configuración.'));
