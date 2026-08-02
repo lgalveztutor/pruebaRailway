@@ -1,8 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { createClient } from '@/lib/postgres-client';
 
 const LINKS = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: '▦' },
@@ -22,29 +22,39 @@ const LINKS = [
 export default function Sidebar({ userEmail }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   async function logout() {
     try {
-      const client = createClient();
-      await client.auth.signOut();
+      await fetch('/api/auth/logout', { method: 'POST' });
     } catch {
-      /* sin sesion activa aun */
+      /* ignore */
     }
     router.push('/admin/login');
   }
 
   return (
-    <aside className="admin-sidebar">
-      <div className="admin-brand">
-        <span className="admin-logo">⚡</span>
-        <span>
-          <b>LA CHISPA GAMER</b>
-          <br />
-          <small>1.8 · ADMIN</small>
-        </span>
+    <aside className={'admin-sidebar' + (open ? ' open' : '')}>
+      <div className="admin-topbar">
+        <div className="admin-brand">
+          <span className="admin-logo">⚡</span>
+          <span>
+            <b>LA CHISPA GAMER</b>
+            <br />
+            <small>1.8 · ADMIN</small>
+          </span>
+        </div>
+        <button
+          className="admin-burger"
+          onClick={() => setOpen((o) => !o)}
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={open}
+        >
+          {open ? '✕' : '☰'}
+        </button>
       </div>
 
-      <nav className="admin-nav">
+      <nav className="admin-nav" onClick={() => setOpen(false)}>
         {LINKS.map((l) => (
           <Link
             key={l.href}
