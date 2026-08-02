@@ -12,7 +12,7 @@ export async function middleware(request) {
   }
 
   const token = request.cookies.get('lcg_session')?.value;
-  console.log(request.cookies.get("lcg_session")?.value);
+
   const user = await verifySessionToken(token);
 
   console.log("Usuario:", user);
