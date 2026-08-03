@@ -8,7 +8,7 @@ export const SITE = {
 };
 
 export const CONTACT = {
-  whatsappPhone: '5491159045262',
+  whatsappPhone: '5491168468563',
   whatsappDisplay: '+54 9 11 6846-8563',
   instagramHandle: '@lachispagamer1.8',
   instagramUrl: 'https://instagram.com/lachispagamer1.8',
