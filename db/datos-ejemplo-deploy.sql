@@ -2,6 +2,7 @@
 -- DATOS DE EJEMPLO PARA DEPLOY
 -- Credenciales de prueba:
 --   email: admin@lachispagamer.test
+--   email: empleado@lachispagamer.test
 --   password: Demo1234!
 -- =====================================================================
 
